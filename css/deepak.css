@@ -1,0 +1,170 @@
+/* ============================================
+   Deepak Counter
+   ============================================ */
+
+.deepak-section {
+  background: linear-gradient(180deg, var(--charcoal) 0%, #1a1410 50%, var(--charcoal) 100%);
+  text-align: center;
+  color: var(--text-on-dark);
+}
+
+.deepak-section .section-title::after {
+  background: linear-gradient(90deg, transparent, var(--saffron-light), transparent);
+}
+
+.deepak__display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+/* SVG flame */
+.deepak__flame-container {
+  position: relative;
+  width: 120px;
+  height: 160px;
+}
+
+.deepak__flame {
+  width: 100%;
+  height: 100%;
+}
+
+.deepak__flame-glow {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(255, 160, 50, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: flicker 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Counter display */
+.deepak__counter {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.deepak__digit-wrapper {
+  overflow: hidden;
+  height: 64px;
+}
+
+.deepak__digit {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 64px;
+  display: block;
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.deepak__comma {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--gold-dark);
+  line-height: 64px;
+}
+
+.deepak__plus {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--gold-dark);
+  margin-left: var(--space-xs);
+}
+
+.deepak__label {
+  font-size: var(--text-base);
+  color: rgba(232, 213, 163, 0.6);
+  max-width: 400px;
+}
+
+.deepak__light-btn {
+  margin-top: var(--space-md);
+  position: relative;
+}
+
+.deepak__light-btn .btn {
+  position: relative;
+  z-index: 1;
+}
+
+/* Flash effect on click */
+.deepak__flash {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold-glow), transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.deepak__flash--active {
+  animation: sparkleBurst 600ms ease-out forwards;
+}
+
+.deepak__personal {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin-top: var(--space-sm);
+}
+
+/* Floating bottom-right mini deepak */
+.deepak-mini {
+  position: fixed;
+  bottom: var(--space-lg);
+  right: var(--space-lg);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--maroon), var(--maroon-deep));
+  border: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: var(--z-sticky);
+  box-shadow: var(--shadow-glow-flame);
+  transition: all var(--transition-fast);
+  font-size: 1.4rem;
+}
+
+.deepak-mini:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(255, 160, 50, 0.6);
+}
+
+@media (max-width: 768px) {
+  .deepak__digit-wrapper {
+    height: 48px;
+  }
+
+  .deepak__digit {
+    font-size: 2rem;
+    line-height: 48px;
+  }
+
+  .deepak__comma {
+    font-size: 2rem;
+    line-height: 48px;
+  }
+
+  .deepak-mini {
+    bottom: var(--space-md);
+    right: var(--space-md);
+    width: 40px;
+    height: 40px;
+  }
+}

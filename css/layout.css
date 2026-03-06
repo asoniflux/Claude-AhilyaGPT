@@ -1,0 +1,311 @@
+/* ============================================
+   Layout - Grid, Sections, Navigation, Responsive
+   ============================================ */
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+/* Sections */
+.section {
+  padding: var(--space-3xl) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.section--dark {
+  background-color: var(--charcoal);
+  color: var(--text-on-dark);
+}
+
+.section--dark .section-title h2,
+.section--dark .section-title .description {
+  color: var(--text-on-dark);
+}
+
+.section--maroon {
+  background-color: var(--maroon-deep);
+  color: var(--text-on-maroon);
+}
+
+.section--maroon .section-title h2,
+.section--maroon .section-title .description {
+  color: var(--text-on-maroon);
+}
+
+.section--parchment {
+  background-color: var(--parchment);
+}
+
+/* Mandala divider between sections */
+.section-divider {
+  height: 40px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gold-light) 20%,
+    var(--gold) 50%,
+    var(--gold-light) 80%,
+    transparent 100%
+  );
+  opacity: 0.3;
+  position: relative;
+}
+
+.section-divider::before {
+  content: '✦';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2rem;
+  color: var(--gold);
+  background: var(--ivory);
+  padding: 0 var(--space-md);
+}
+
+.section--dark + .section-divider::before,
+.section--maroon + .section-divider::before {
+  background: var(--charcoal);
+}
+
+/* Navigation */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  z-index: var(--z-sticky);
+  transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
+  display: flex;
+  align-items: center;
+}
+
+.nav--scrolled {
+  background-color: rgba(74, 14, 28, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.nav__logo {
+  font-family: var(--font-accent);
+  font-size: var(--text-xl);
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-decoration: none;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.nav__link {
+  color: var(--gold-light);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  transition: color var(--transition-fast);
+  letter-spacing: 0.5px;
+}
+
+.nav__link:hover,
+.nav__link--active {
+  color: var(--gold);
+}
+
+.nav__link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  transition: width var(--transition-normal);
+}
+
+.nav__link:hover::after,
+.nav__link--active::after {
+  width: 100%;
+}
+
+.nav__badge-btn {
+  position: relative;
+  color: var(--gold-light);
+  font-size: 1.3rem;
+  padding: var(--space-xs);
+  transition: color var(--transition-fast);
+}
+
+.nav__badge-btn:hover {
+  color: var(--gold);
+}
+
+.nav__badge-count {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  background: var(--saffron);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile hamburger */
+.nav__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: var(--space-sm);
+  cursor: pointer;
+}
+
+.nav__hamburger span {
+  width: 24px;
+  height: 2px;
+  background: var(--gold-light);
+  transition: all var(--transition-fast);
+  border-radius: 2px;
+}
+
+.nav__hamburger--open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.nav__hamburger--open span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav__hamburger--open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile drawer */
+.nav__drawer {
+  display: none;
+  position: fixed;
+  top: var(--nav-height);
+  right: 0;
+  bottom: 0;
+  width: 280px;
+  background: rgba(74, 14, 28, 0.97);
+  backdrop-filter: blur(16px);
+  padding: var(--space-xl) var(--space-lg);
+  flex-direction: column;
+  gap: var(--space-lg);
+  z-index: var(--z-overlay);
+  transform: translateX(100%);
+  transition: transform var(--transition-normal);
+}
+
+.nav__drawer--open {
+  display: flex;
+  transform: translateX(0);
+}
+
+.nav__drawer .nav__link {
+  font-size: var(--text-lg);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid rgba(197, 163, 85, 0.2);
+}
+
+/* Grid helpers */
+.grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.grid--2 { grid-template-columns: repeat(2, 1fr); }
+.grid--3 { grid-template-columns: repeat(3, 1fr); }
+.grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .grid--3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .nav__links { display: none; }
+  .nav__hamburger { display: flex; }
+
+  .section {
+    padding: var(--space-2xl) 0;
+  }
+
+  .container {
+    padding: 0 var(--space-md);
+  }
+
+  .grid--2,
+  .grid--3,
+  .grid--4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: var(--space-xl) 0;
+  }
+
+  :root {
+    --nav-height: 60px;
+  }
+}
+
+/* Footer */
+.footer {
+  background: var(--charcoal);
+  color: var(--text-on-dark);
+  padding: var(--space-xl) 0;
+  text-align: center;
+}
+
+.footer__inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.footer__ornament {
+  color: var(--gold);
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-md);
+}
+
+.footer p {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.footer a {
+  color: var(--gold-light);
+}

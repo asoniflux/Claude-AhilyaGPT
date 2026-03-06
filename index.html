@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A tribute to Lok Mata Devi Ahilya Bai Holkar — explore her legendary contributions through interactive AI personas, maps, and more.">
+  <title>Lok Mata Devi Ahilya Bai Holkar | AhilyaGPT</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪔</text></svg>">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/court.css">
+  <link rel="stylesheet" href="css/map.css">
+  <link rel="stylesheet" href="css/studio.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/deepak.css">
+  <link rel="stylesheet" href="css/badges.css">
+</head>
+<body>
+
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="nav" id="main-nav">
+    <div class="nav__inner">
+      <a href="#hero" class="nav__logo text-devanagari">अहिल्या</a>
+
+      <div class="nav__links" id="nav-links">
+        <a href="#court" class="nav__link" data-section="court">Darbar</a>
+        <a href="#sacred-map" class="nav__link" data-section="sacred-map">Sacred Map</a>
+        <a href="#studio" class="nav__link" data-section="studio">Studio</a>
+        <a href="#dashboard" class="nav__link" data-section="dashboard">Dashboard</a>
+        <a href="#deepak-section" class="nav__link" data-section="deepak-section">Deepak</a>
+        <button class="nav__badge-btn" id="badge-toggle" aria-label="View badges">
+          🏆
+          <span class="nav__badge-count" id="badge-count">0</span>
+        </button>
+      </div>
+
+      <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="nav__drawer" id="nav-drawer">
+      <a href="#court" class="nav__link" data-section="court">Darbar</a>
+      <a href="#sacred-map" class="nav__link" data-section="sacred-map">Sacred Map</a>
+      <a href="#studio" class="nav__link" data-section="studio">Studio</a>
+      <a href="#dashboard" class="nav__link" data-section="dashboard">Dashboard</a>
+      <a href="#deepak-section" class="nav__link" data-section="deepak-section">Deepak</a>
+      <button class="nav__badge-btn" id="badge-toggle-mobile" aria-label="View badges">
+        🏆 Badges <span class="nav__badge-count" id="badge-count-mobile">0</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero__particles" id="hero-particles"></div>
+
+    <div class="hero__content">
+      <span class="hero__tag text-devanagari">॥ श्री ॥</span>
+      <h1 class="hero__title">
+        Lok Mata Devi Ahilya Bai
+        <span>Holkar (1725–1795)</span>
+      </h1>
+      <p class="hero__sloka text-devanagari">
+        "यत्र नार्यस्तु पूज्यन्ते रमन्ते तत्र देवताः"
+      </p>
+      <div class="hero__cta">
+        <a href="#court" class="btn btn--shimmer btn--lg">Begin the Journey</a>
+      </div>
+
+      <div class="hero__deepak">
+        <div id="hero-deepak-flame" style="font-size: 3rem; filter: drop-shadow(0 0 20px rgba(255, 160, 50, 0.6));">🪔</div>
+        <div class="hero__deepak-counter" id="hero-counter">
+          <span id="hero-counter-number">0</span>+
+        </div>
+        <p class="hero__deepak-label">Virtual deepaks lit in tribute to Lok Mata Ahilya Bai</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== AHILYAGPT - COURT PERSONAS ========== -->
+  <div class="section-divider"></div>
+  <section class="section court" id="court">
+    <div class="container">
+      <div class="section-title reveal">
+        <span class="subtitle">AhilyaGPT</span>
+        <h2>The Royal Court</h2>
+        <p class="description">Tap to hear from historical figures of Ahilya Bai's era. Each persona shares their perspective on her legendary reign.</p>
+      </div>
+      <div class="court__grid reveal--stagger" id="court-grid">
+        <!-- Cards injected by court.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== INTERACTIVE INDIA MAP ========== -->
+  <div class="section-divider"></div>
+  <section class="section sacred-map" id="sacred-map">
+    <div class="container">
+      <div class="section-title reveal">
+        <span class="subtitle">The Sacred Blueprint</span>
+        <h2>Her Philanthropic Footprint</h2>
+        <p class="description">An interactive map of India showcasing Ahilya Bai's temples, ghats, dharamshalas, and wells across the subcontinent.</p>
+      </div>
+
+      <div class="map-filters reveal" id="map-filters">
+        <button class="map-filter map-filter--temple active" data-type="temple">
+          <span class="map-filter__dot"></span> Temples
+        </button>
+        <button class="map-filter map-filter--ghat active" data-type="ghat">
+          <span class="map-filter__dot"></span> Ghats
+        </button>
+        <button class="map-filter map-filter--dharmshala active" data-type="dharmshala">
+          <span class="map-filter__dot"></span> Dharmshalas
+        </button>
+        <button class="map-filter map-filter--well active" data-type="well">
+          <span class="map-filter__dot"></span> Wells
+        </button>
+      </div>
+
+      <div class="map-container reveal">
+        <div id="india-map"></div>
+      </div>
+
+      <p class="map-count" id="map-count">Showing all sites</p>
+    </div>
+  </section>
+
+  <!-- ========== AI MEDIA CREATION STUDIO ========== -->
+  <div class="section-divider"></div>
+  <section class="section studio" id="studio">
+    <div class="container">
+      <div class="section-title reveal">
+        <span class="subtitle">AI Media Creation</span>
+        <h2>The Studio</h2>
+        <p class="description">Generate cinematic scenes, portraits, and traditional Maheshwari sari patterns inspired by the era of Ahilya Bai.</p>
+      </div>
+
+      <div class="studio__layout">
+        <div class="studio__controls reveal--left">
+          <div class="tabs" id="studio-tabs">
+            <button class="tab tab--active" data-tab="scene">Cinematic Scene</button>
+            <button class="tab" data-tab="portrait">Portrait</button>
+            <button class="tab" data-tab="sari">Maheshwari Sari</button>
+          </div>
+
+          <!-- Scene tab -->
+          <div class="studio__tab-panel studio__tab-panel--active" id="tab-scene">
+            <div class="studio__form">
+              <div class="studio__form-group">
+                <label>Mood</label>
+                <div class="select-wrapper">
+                  <select id="scene-mood">
+                    <option value="majestic">Majestic</option>
+                    <option value="serene">Serene</option>
+                    <option value="dramatic">Dramatic</option>
+                    <option value="golden">Golden Hour</option>
+                    <option value="moonlit">Moonlit</option>
+                  </select>
+                </div>
+              </div>
+              <div class="studio__form-group">
+                <label>Location</label>
+                <div class="select-wrapper">
+                  <select id="scene-location">
+                    <option value="maheshwar">Maheshwar Fort</option>
+                    <option value="narmada">Narmada Ghats</option>
+                    <option value="kashi">Kashi Vishwanath</option>
+                    <option value="court">Holkar Court</option>
+                    <option value="battlefield">Battlefield</option>
+                  </select>
+                </div>
+              </div>
+              <div class="studio__form-group">
+                <label>Lighting</label>
+                <div class="select-wrapper">
+                  <select id="scene-lighting">
+                    <option value="dawn">Dawn</option>
+                    <option value="sunset">Sunset</option>
+                    <option value="torchlit">Torchlit</option>
+                    <option value="overcast">Overcast</option>
+                    <option value="midday">Midday Sun</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn--shimmer btn--lg studio__generate-btn" data-generate="scene">
+                ✨ Generate Scene
+              </button>
+            </div>
+          </div>
+
+          <!-- Portrait tab -->
+          <div class="studio__tab-panel" id="tab-portrait">
+            <div class="studio__form">
+              <div class="studio__form-group">
+                <label>Style</label>
+                <div class="select-wrapper">
+                  <select id="portrait-style">
+                    <option value="oil">Oil Painting</option>
+                    <option value="miniature">Miniature Art</option>
+                    <option value="photo">Photograph</option>
+                    <option value="watercolor">Watercolor</option>
+                    <option value="digital">Digital Art</option>
+                  </select>
+                </div>
+              </div>
+              <div class="studio__form-group">
+                <label>Expression</label>
+                <div class="select-wrapper">
+                  <select id="portrait-expression">
+                    <option value="regal">Regal</option>
+                    <option value="contemplative">Contemplative</option>
+                    <option value="joyful">Joyful</option>
+                    <option value="commanding">Commanding</option>
+                  </select>
+                </div>
+              </div>
+              <div class="studio__form-group">
+                <label>Background</label>
+                <div class="select-wrapper">
+                  <select id="portrait-bg">
+                    <option value="palace">Palace Interior</option>
+                    <option value="garden">Garden</option>
+                    <option value="temple">Temple</option>
+                    <option value="gold">Plain Gold</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn--shimmer btn--lg studio__generate-btn" data-generate="portrait">
+                🎨 Generate Portrait
+              </button>
+            </div>
+          </div>
+
+          <!-- Sari tab -->
+          <div class="studio__tab-panel" id="tab-sari">
+            <div class="studio__form">
+              <div class="studio__form-group">
+                <label>Pattern</label>
+                <div class="select-wrapper">
+                  <select id="sari-pattern">
+                    <option value="bugdi">Traditional Bugdi</option>
+                    <option value="chatai">Chatai</option>
+                    <option value="chameli">Chameli</option>
+                    <option value="nandana">Nandana</option>
+                  </select>
+                </div>
+              </div>
+              <div class="studio__form-group">
+                <label>Color</label>
+                <div class="select-wrapper">
+                  <select id="sari-color">
+                    <option value="maroon-gold">Maroon & Gold</option>
+                    <option value="purple-silver">Purple & Silver</option>
+                    <option value="saffron-ivory">Saffron & Ivory</option>
+                    <option value="indigo-gold">Indigo & Gold</option>
+                  </select>
+                </div>
+              </div>
+              <div class="studio__form-group">
+                <label>Border Style</label>
+                <div class="select-wrapper">
+                  <select id="sari-border">
+                    <option value="wide">Wide Pallu</option>
+                    <option value="narrow">Narrow Border</option>
+                    <option value="full">Full Body</option>
+                    <option value="fusion">Contemporary Fusion</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn--shimmer btn--lg studio__generate-btn" data-generate="sari">
+                🧵 Design Sari
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="studio__gallery reveal--right" id="studio-gallery">
+          <h3 class="studio__gallery-title">Gallery</h3>
+          <div class="studio__gallery-grid" id="gallery-grid">
+            <div class="studio__empty">
+              <div class="studio__empty-icon">🎨</div>
+              <p>Your creations will appear here.<br>Select options and click Generate!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== POLITICIAN DASHBOARD ========== -->
+  <div class="section-divider"></div>
+  <section class="section dashboard" id="dashboard">
+    <div class="container">
+      <div class="section-title reveal">
+        <span class="subtitle">State Pride Summary</span>
+        <h2>Share Her Legacy</h2>
+        <p class="description">Select a state to discover Ahilya Bai's local contributions and share them with your community.</p>
+      </div>
+
+      <div class="dashboard__controls reveal">
+        <div class="select-wrapper">
+          <select id="state-select">
+            <option value="">Select a State...</option>
+          </select>
+        </div>
+        <div class="select-wrapper" id="city-select-wrapper" style="display: none;">
+          <select id="city-select">
+            <option value="">Select a City...</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="dashboard__card" id="dashboard-card">
+        <div class="dashboard__card-header">
+          <div class="dashboard__card-emblem" id="card-emblem">🏛️</div>
+          <div>
+            <h3 class="dashboard__card-title" id="card-title"></h3>
+            <p class="dashboard__card-subtitle" id="card-subtitle"></p>
+          </div>
+        </div>
+
+        <p class="dashboard__summary" id="card-summary"></p>
+
+        <div class="dashboard__contributions">
+          <h4>Key Contributions</h4>
+          <ul id="card-contributions"></ul>
+        </div>
+
+        <div class="dashboard__keyfact">
+          <p class="dashboard__keyfact-label">Key Fact</p>
+          <p id="card-keyfact"></p>
+        </div>
+
+        <div class="dashboard__share">
+          <p class="dashboard__share-label">Share This Legacy</p>
+          <div class="share-buttons" id="share-buttons">
+            <button class="share-btn share-btn--twitter" id="share-twitter">
+              𝕏 Share on X
+            </button>
+            <button class="share-btn share-btn--linkedin" id="share-linkedin">
+              in Share on LinkedIn
+            </button>
+            <button class="share-btn share-btn--copy" id="share-copy">
+              📋 Copy Text
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard__empty reveal" id="dashboard-empty">
+        <div class="dashboard__empty-icon">🗺️</div>
+        <p>Select a state above to explore Ahilya Bai's contributions</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DEEPAK COUNTER ========== -->
+  <div class="section-divider"></div>
+  <section class="section deepak-section" id="deepak-section">
+    <div class="container">
+      <div class="section-title reveal">
+        <span class="subtitle">A Tribute of Light</span>
+        <h2>The Deepak Counter</h2>
+        <p class="description">Light a virtual deepak to honor the legacy of Lok Mata Ahilya Bai. Every flame is a prayer, every light a memory.</p>
+      </div>
+
+      <div class="deepak__display reveal">
+        <div class="deepak__flame-container">
+          <svg class="deepak__flame" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Lamp base -->
+            <ellipse cx="60" cy="145" rx="40" ry="8" fill="#8B7332"/>
+            <ellipse cx="60" cy="140" rx="35" ry="6" fill="#C5A355"/>
+            <path d="M30 140 Q30 120 45 115 L75 115 Q90 120 90 140" fill="#8B7332"/>
+            <path d="M35 138 Q35 122 47 118 L73 118 Q85 122 85 138" fill="#C5A355"/>
+            <!-- Wick -->
+            <rect x="57" y="100" width="6" height="18" rx="3" fill="#4A3520"/>
+            <!-- Flame -->
+            <g class="deepak-flame-group" style="animation: flicker 2s ease-in-out infinite; transform-origin: 60px 80px;">
+              <path d="M60 30 Q70 55 68 75 Q65 90 60 95 Q55 90 52 75 Q50 55 60 30Z" fill="#FF6B00" opacity="0.9"/>
+              <path d="M60 40 Q67 58 65 72 Q63 85 60 88 Q57 85 55 72 Q53 58 60 40Z" fill="#FFA500" opacity="0.95"/>
+              <path d="M60 50 Q64 62 63 72 Q62 80 60 82 Q58 80 57 72 Q56 62 60 50Z" fill="#FFD700"/>
+              <path d="M60 58 Q62 65 61 72 Q60 76 60 77 Q60 76 59 72 Q58 65 60 58Z" fill="#FFFACD"/>
+            </g>
+          </svg>
+          <div class="deepak__flame-glow"></div>
+        </div>
+
+        <div class="deepak__counter" id="deepak-counter">
+          <!-- Digits injected by deepak.js -->
+        </div>
+
+        <p class="deepak__label">Virtual deepaks lit in tribute to Lok Mata Ahilya Bai Holkar</p>
+
+        <div class="deepak__light-btn">
+          <button class="btn btn--gold btn--lg" id="light-deepak-btn">
+            🪔 Light a Deepak
+          </button>
+          <div class="deepak__flash" id="deepak-flash"></div>
+        </div>
+
+        <p class="deepak__personal" id="deepak-personal"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__ornament">✦ ✦ ✦</div>
+      <p style="color: var(--gold-light); font-family: var(--font-heading); font-size: var(--text-lg); margin-bottom: var(--space-md);">
+        Made with reverence for Lok Mata Devi Ahilya Bai Holkar
+      </p>
+      <p class="text-devanagari" style="color: var(--gold-dark); margin-bottom: var(--space-lg);">
+        ॥ जय अहिल्या माता ॥
+      </p>
+      <p>
+        Her reign (1767–1795) transformed India through temples, ghats, dharamshalas, and wells
+        spanning from Gangotri to Rameswaram, Dwarka to Jagannath Puri.
+      </p>
+      <p style="margin-top: var(--space-md); font-size: var(--text-xs);">
+        Celebrating her 300th Birth Anniversary (1725–2025) &bull; AhilyaGPT Tribute
+      </p>
+    </div>
+  </footer>
+
+  <!-- ========== BADGE PANEL ========== -->
+  <div class="badge-panel-overlay" id="badge-overlay"></div>
+  <aside class="badge-panel" id="badge-panel">
+    <div class="badge-panel__header">
+      <h3 class="badge-panel__title">Collector Badges</h3>
+      <button class="badge-panel__close" id="badge-close">&times;</button>
+    </div>
+    <div class="badge-panel__progress">
+      <p class="badge-panel__progress-text"><span id="badges-unlocked">0</span> of 6 badges unlocked</p>
+      <div class="badge-panel__progress-bar">
+        <div class="badge-panel__progress-fill" id="badges-progress" style="width: 0%"></div>
+      </div>
+    </div>
+    <div class="badge-list" id="badge-list">
+      <!-- Badge items injected by badges.js -->
+    </div>
+  </aside>
+
+  <!-- ========== TOAST CONTAINER ========== -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ========== MINI DEEPAK (floating) ========== -->
+  <div class="deepak-mini" id="deepak-mini" title="Light a Deepak">🪔</div>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script src="js/utils.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/court.js"></script>
+  <script src="js/map-data.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/studio.js"></script>
+  <script src="js/dashboard-data.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/deepak.js"></script>
+  <script src="js/badges.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+/* ============================================
+   Hero Section
+   ============================================ */
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    var(--maroon-deep) 0%,
+    var(--maroon) 40%,
+    #5A1525 70%,
+    var(--charcoal) 100%
+  );
+  overflow: hidden;
+  padding: var(--space-xl);
+}
+
+/* Mandala overlay pattern */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    transparent 30%,
+    rgba(197, 163, 85, 0.03) 31%,
+    transparent 32%,
+    transparent 40%,
+    rgba(197, 163, 85, 0.03) 41%,
+    transparent 42%,
+    transparent 50%,
+    rgba(197, 163, 85, 0.04) 51%,
+    transparent 52%,
+    transparent 60%,
+    rgba(197, 163, 85, 0.03) 61%,
+    transparent 62%,
+    transparent 70%,
+    rgba(197, 163, 85, 0.02) 71%,
+    transparent 72%,
+    transparent 80%,
+    rgba(197, 163, 85, 0.02) 81%,
+    transparent 82%
+  );
+  animation: spin 120s linear infinite;
+  pointer-events: none;
+}
+
+/* Second mandala ring */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  border: 1px solid rgba(197, 163, 85, 0.08);
+  pointer-events: none;
+}
+
+.hero__particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero__content {
+  position: relative;
+  z-index: var(--z-base);
+  animation: fadeSlideUp 1.2s ease-out;
+}
+
+.hero__tag {
+  display: inline-block;
+  font-family: var(--font-accent);
+  font-size: var(--text-sm);
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: var(--space-md);
+  opacity: 0.8;
+}
+
+.hero__title {
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1.1;
+  margin-bottom: var(--space-md);
+  text-shadow: 0 2px 40px rgba(197, 163, 85, 0.3);
+}
+
+.hero__title span {
+  display: block;
+  font-size: 0.5em;
+  font-weight: 400;
+  color: var(--gold-light);
+  margin-top: var(--space-sm);
+  letter-spacing: 4px;
+}
+
+.hero__sloka {
+  font-family: var(--font-accent);
+  font-size: var(--text-lg);
+  color: rgba(232, 213, 163, 0.7);
+  font-style: italic;
+  margin-bottom: var(--space-xl);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero__cta {
+  margin-bottom: var(--space-3xl);
+}
+
+/* Deepak in hero */
+.hero__deepak {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.hero__deepak-counter {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  color: var(--gold);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.hero__deepak-label {
+  font-size: var(--text-sm);
+  color: rgba(232, 213, 163, 0.6);
+  max-width: 300px;
+}
+
+@media (max-width: 768px) {
+  .hero::before {
+    width: 500px;
+    height: 500px;
+  }
+}

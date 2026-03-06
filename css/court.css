@@ -1,0 +1,193 @@
+/* ============================================
+   AhilyaGPT - Court Personas
+   ============================================ */
+
+.court {
+  background: linear-gradient(180deg, var(--parchment) 0%, var(--ivory) 100%);
+}
+
+.court__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+}
+
+.court-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gold-light);
+  padding: var(--space-lg);
+  text-align: center;
+  position: relative;
+  transition: all var(--transition-normal);
+  cursor: pointer;
+}
+
+.court-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-elevated);
+  border-color: var(--gold);
+}
+
+.court-card--active {
+  border-color: var(--gold);
+  box-shadow: var(--shadow-glow-gold);
+  z-index: 2;
+}
+
+.court-card--dimmed {
+  opacity: 0.5;
+  transform: scale(0.98);
+}
+
+/* Avatar circle with initials */
+.court-card__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: white;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.court-card__avatar::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid var(--gold-light);
+}
+
+.court-card__name {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--charcoal);
+  margin-bottom: 2px;
+}
+
+.court-card__title {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: var(--space-sm);
+}
+
+.court-card__era {
+  font-size: var(--text-xs);
+  color: var(--gold-dark);
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+}
+
+.court-card__speak-btn {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--charcoal);
+  padding: 0.5rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  transition: all var(--transition-fast);
+}
+
+.court-card__speak-btn:hover {
+  box-shadow: var(--shadow-glow-gold);
+  transform: scale(1.05);
+}
+
+/* Speech bubble */
+.court-card__speech {
+  display: none;
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: linear-gradient(135deg, var(--maroon-deep), var(--maroon));
+  color: var(--gold-light);
+  border-radius: var(--radius-md);
+  text-align: left;
+  position: relative;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  animation: scaleIn 300ms ease-out;
+}
+
+.court-card__speech--visible {
+  display: block;
+}
+
+/* Triangle pointer */
+.court-card__speech::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid var(--maroon-deep);
+}
+
+.court-card__speech-text {
+  min-height: 60px;
+}
+
+.court-card__speech-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--gold);
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+.court-card__speech-source {
+  display: block;
+  margin-top: var(--space-sm);
+  font-size: var(--text-xs);
+  color: rgba(232, 213, 163, 0.5);
+  font-style: italic;
+}
+
+.court-card__progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.court-card__progress-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold-light);
+  opacity: 0.3;
+}
+
+.court-card__progress-dot--active {
+  opacity: 1;
+  background: var(--gold);
+}
+
+@media (max-width: 1024px) {
+  .court__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .court__grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}

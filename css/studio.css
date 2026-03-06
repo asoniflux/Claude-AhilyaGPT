@@ -1,0 +1,226 @@
+/* ============================================
+   AI Media Creation Studio
+   ============================================ */
+
+.studio {
+  background: linear-gradient(180deg, var(--ivory) 0%, var(--parchment) 100%);
+}
+
+.studio__layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.studio__controls {
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gold-light);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.studio__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.studio__form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.studio__form-group label {
+  font-weight: 600;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.studio__generate-btn {
+  margin-top: var(--space-md);
+  width: 100%;
+}
+
+/* Tab panels */
+.studio__tab-panel {
+  display: none;
+}
+
+.studio__tab-panel--active {
+  display: block;
+  animation: fadeIn 300ms ease;
+}
+
+/* Gallery */
+.studio__gallery {
+  min-height: 400px;
+}
+
+.studio__gallery-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  color: var(--charcoal);
+  margin-bottom: var(--space-md);
+}
+
+.studio__gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+}
+
+.studio__gallery-item {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  position: relative;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.studio__gallery-item:hover {
+  transform: scale(1.03);
+}
+
+/* CSS gradient art placeholders */
+.studio__gallery-art {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: var(--space-sm);
+}
+
+.studio__gallery-art--fort {
+  background: linear-gradient(
+    180deg,
+    #1a0a2e 0%,
+    #2d1b4e 30%,
+    #d4722a 60%,
+    #f0a050 75%,
+    #c5a355 100%
+  );
+}
+
+.studio__gallery-art--portrait {
+  background: linear-gradient(
+    135deg,
+    #4a0e1c 0%,
+    #6b1d2a 40%,
+    #c5a355 60%,
+    #e8d5a3 100%
+  );
+}
+
+.studio__gallery-art--sari {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--maroon) 0px,
+    var(--maroon) 10px,
+    var(--gold) 10px,
+    var(--gold) 12px,
+    var(--maroon-deep) 12px,
+    var(--maroon-deep) 22px,
+    var(--gold-light) 22px,
+    var(--gold-light) 24px
+  );
+}
+
+.studio__gallery-art--temple {
+  background: linear-gradient(
+    180deg,
+    #87CEEB 0%,
+    #87CEEB 40%,
+    #d4722a 40%,
+    #c5a355 60%,
+    #8B7332 100%
+  );
+}
+
+.studio__gallery-art--narmada {
+  background: linear-gradient(
+    180deg,
+    #f0a050 0%,
+    #d4722a 20%,
+    #2a8b8b 50%,
+    #1a5b5b 100%
+  );
+}
+
+.studio__gallery-art--court {
+  background: linear-gradient(
+    135deg,
+    #2C2420 0%,
+    #4A0E1C 30%,
+    #6B1D2A 50%,
+    #C5A355 70%,
+    #E8D5A3 100%
+  );
+}
+
+.studio__gallery-label {
+  font-size: var(--text-xs);
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(4px);
+}
+
+/* Loading skeleton for generation */
+.studio__loading {
+  aspect-ratio: 4/3;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  background: var(--parchment);
+  border: 2px dashed var(--gold-light);
+}
+
+.studio__loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--gold-light);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.studio__loading-text {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.studio__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.studio__empty-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-md);
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .studio__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .studio__gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
