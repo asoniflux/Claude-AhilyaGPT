@@ -93,3 +93,26 @@ function renderPersonalCount(personal) {
     el.textContent = 'You have personally lit ' + personal + ' deepak' + (personal === 1 ? '' : 's');
   }
 }
+
+function spawnFloatingDeepak() {
+  var deepak = document.createElement('div');
+  deepak.classList.add('floating-deepak');
+  deepak.textContent = '🪔';
+  deepak.style.left = Math.random() * 100 + 'vw';
+  deepak.style.animationDuration = (8 + Math.random() * 12) + 's';
+  deepak.style.fontSize = (14 + Math.random() * 18) + 'px';
+  deepak.style.opacity = (0.3 + Math.random() * 0.5).toString();
+  document.body.appendChild(deepak);
+  deepak.addEventListener('animationend', function () {
+    deepak.remove();
+  });
+}
+
+// Spawn floating deepaks periodically
+setInterval(spawnFloatingDeepak, 3000);
+// Initial burst
+setTimeout(function () {
+  for (var i = 0; i < 5; i++) {
+    setTimeout(spawnFloatingDeepak, i * 600);
+  }
+}, 1000);

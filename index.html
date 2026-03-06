@@ -12,7 +12,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Noto+Serif+Devanagari:wght@400;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/content.css">
   <link rel="stylesheet" href="css/court.css">
   <link rel="stylesheet" href="css/map.css">
   <link rel="stylesheet" href="css/studio.css">
@@ -39,6 +40,8 @@
       <a href="#hero" class="nav__logo text-devanagari">अहिल्या</a>
 
       <div class="nav__links" id="nav-links">
+        <a href="#biography" class="nav__link" data-section="biography">Biography</a>
+        <a href="#contributions" class="nav__link" data-section="contributions">Contributions</a>
         <a href="#court" class="nav__link" data-section="court">Darbar</a>
         <a href="#sacred-map" class="nav__link" data-section="sacred-map">Sacred Map</a>
         <a href="#studio" class="nav__link" data-section="studio">Studio</a>
@@ -59,6 +62,8 @@
 
     <!-- Mobile drawer -->
     <div class="nav__drawer" id="nav-drawer">
+      <a href="#biography" class="nav__link" data-section="biography">Biography</a>
+      <a href="#contributions" class="nav__link" data-section="contributions">Contributions</a>
       <a href="#court" class="nav__link" data-section="court">Darbar</a>
       <a href="#sacred-map" class="nav__link" data-section="sacred-map">Sacred Map</a>
       <a href="#studio" class="nav__link" data-section="studio">Studio</a>
@@ -74,26 +79,277 @@
   <section class="hero" id="hero">
     <div class="hero__particles" id="hero-particles"></div>
 
+    <!-- SVG Mandala Background -->
+    <div class="mandala-bg">
+      <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <circle cx="400" cy="400" r="380" stroke="#D4891A" stroke-width="0.5" stroke-dasharray="4 8"/>
+        <circle cx="400" cy="400" r="300" stroke="#D4891A" stroke-width="0.5" stroke-dasharray="2 6"/>
+        <circle cx="400" cy="400" r="220" stroke="#D4891A" stroke-width="0.5" stroke-dasharray="3 7"/>
+        <circle cx="400" cy="400" r="140" stroke="#D4891A" stroke-width="1" stroke-dasharray="5 5"/>
+        <circle cx="400" cy="400" r="60" stroke="#D4891A" stroke-width="1"/>
+        <g stroke="#D4891A" stroke-width="0.5">
+          <line x1="400" y1="20" x2="400" y2="780"/>
+          <line x1="20" y1="400" x2="780" y2="400"/>
+          <line x1="128" y1="128" x2="672" y2="672"/>
+          <line x1="672" y1="128" x2="128" y2="672"/>
+          <line x1="70" y1="260" x2="730" y2="540"/>
+          <line x1="70" y1="540" x2="730" y2="260"/>
+          <line x1="260" y1="70" x2="540" y2="730"/>
+          <line x1="540" y1="70" x2="260" y2="730"/>
+        </g>
+        <g fill="#D4891A" opacity="0.5">
+          <ellipse cx="400" cy="50" rx="8" ry="20" transform="rotate(0 400 400)"/>
+          <ellipse cx="400" cy="50" rx="8" ry="20" transform="rotate(30 400 400)"/>
+          <ellipse cx="400" cy="50" rx="8" ry="20" transform="rotate(60 400 400)"/>
+          <ellipse cx="400" cy="50" rx="8" ry="20" transform="rotate(90 400 400)"/>
+          <ellipse cx="400" cy="50" rx="8" ry="20" transform="rotate(120 400 400)"/>
+          <ellipse cx="400" cy="50" rx="8" ry="20" transform="rotate(150 400 400)"/>
+          <ellipse cx="400" cy="50" rx="8" ry="20" transform="rotate(180 400 400)"/>
+          <ellipse cx="400" cy="50" rx="8" ry="20" transform="rotate(210 400 400)"/>
+          <ellipse cx="400" cy="50" rx="8" ry="20" transform="rotate(240 400 400)"/>
+          <ellipse cx="400" cy="50" rx="8" ry="20" transform="rotate(270 400 400)"/>
+          <ellipse cx="400" cy="50" rx="8" ry="20" transform="rotate(300 400 400)"/>
+          <ellipse cx="400" cy="50" rx="8" ry="20" transform="rotate(330 400 400)"/>
+        </g>
+      </svg>
+    </div>
+    <div class="hero-glow"></div>
+
     <div class="hero__content">
-      <span class="hero__tag text-devanagari">॥ श्री ॥</span>
+      <span class="hero__tag hindi-subtitle">॥ जय माँ अहिल्याबाई होलकर ॥</span>
       <h1 class="hero__title">
-        Lok Mata Devi Ahilya Bai
-        <span>Holkar (1725–1795)</span>
+        Devi Ahilyabai<br>Holkar
       </h1>
-      <p class="hero__sloka text-devanagari">
-        "यत्र नार्यस्तु पूज्यन्ते रमन्ते तत्र देवताः"
+      <span class="hero__subtitle-line">Lok Mata &nbsp;·&nbsp; The Eternal Queen of Malwa</span>
+      <span class="hero__ornament">✦ ❧ ✦ ❧ ✦</span>
+      <p class="hero__tagline">
+        "She who ruled with justice, built with devotion, and loved with the heart of a mother — not just a queen, but the soul of a civilization."
       </p>
-      <div class="hero__cta">
-        <a href="#court" class="btn btn--shimmer btn--lg">Begin the Journey</a>
+      <p class="hero__dates">31 May 1725 &nbsp;—&nbsp; 13 August 1795</p>
+
+      <div class="hero__cta" style="margin-top: 2rem;">
+        <a href="#intro-section" class="btn btn--shimmer btn--lg">Begin the Journey</a>
       </div>
 
       <div class="hero__deepak">
-        <div id="hero-deepak-flame" style="font-size: 3rem; filter: drop-shadow(0 0 20px rgba(255, 160, 50, 0.6));">🪔</div>
+        <!-- CSS Deepak (oil lamp) -->
+        <div class="css-deepak">
+          <div class="flame-glow-hero"></div>
+          <div class="css-flame">
+            <div class="css-flame-outer"></div>
+            <div class="css-flame-inner"></div>
+          </div>
+          <div class="css-wick"></div>
+          <div class="css-lamp-plate"></div>
+          <div class="css-lamp-stem"></div>
+          <div class="css-lamp-base"></div>
+        </div>
         <div class="hero__deepak-counter" id="hero-counter">
           <span id="hero-counter-number">0</span>+
         </div>
         <p class="hero__deepak-label">Virtual deepaks lit in tribute to Lok Mata Ahilya Bai</p>
       </div>
+    </div>
+
+    <div class="scroll-indicator">
+      SCROLL TO DISCOVER
+    </div>
+  </section>
+
+  <!-- ========== INTRO QUOTE ========== -->
+  <div class="section-divider"></div>
+  <section class="section section--dark intro-quote-section" id="intro-section">
+    <div class="container">
+      <div class="intro-bg reveal">
+        <span class="section-label">A Word From History</span>
+        <blockquote class="hero-quote">
+          "In the galaxy of rulers who have adorned the pages of Indian history, Ahilyabai Holkar shines as a star of the first magnitude — a monarch whose life and reign remain to this day an inspiring example of what devoted, just, and wise governance truly means."
+        </blockquote>
+        <p class="quote-attribution">— Historical accounts of the Maratha Empire</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== BIOGRAPHY ========== -->
+  <div class="section-divider"></div>
+  <section class="section biography-section" id="biography">
+    <div class="container">
+      <div class="section-title reveal">
+        <span class="subtitle">Her Story</span>
+        <h2>Born of Dust, Made of Gold</h2>
+      </div>
+      <div class="bio-grid reveal">
+        <div class="bio-text">
+          <p>Born on 31 May 1725 in Chondi village near Jamkhed in present-day Maharashtra, Ahilyabai Holkar was the daughter of Mankoji Shinde, a village patil. Her destiny changed when Peshwa Baji Rao I's commander, Malhar Rao Holkar, noticed her devout prayer in a temple and was so moved that he chose her as the bride for his son, Khanderao Holkar.</p>
+          <p>At just eight years old, she came into the Holkar household — not as a burden, but as a light. She was educated by her father-in-law Malhar Rao, who recognized her intelligence and sharp governance instincts. She studied statecraft, military science, administration, and the scriptures.</p>
+          <p>Tragedy struck early and often. Her husband Khanderao was killed in the Battle of Kumbher in 1754. Her son Malerao died young. Her father-in-law Malhar Rao passed away in 1766. Yet Ahilyabai never collapsed. She rose — like the flame of a deepak in a storm — steady, bright, and defiant.</p>
+          <p>In 1767, at 42 years of age, she assumed full reign of the Holkar state of Malwa, ruling from her capital at Maheshwar on the banks of the sacred Narmada. For 28 years, she governed with a wisdom that made her contemporaries, including Peshwas and British observers, regard her with awe.</p>
+        </div>
+        <div class="bio-facts">
+          <span class="section-label" style="margin-bottom: 1rem; display: block;">Quick Facts</span>
+          <div class="fact-item"><span class="fact-key">Born</span><span class="fact-val">31 May 1725, Chondi, Maharashtra</span></div>
+          <div class="fact-item"><span class="fact-key">Dynasty</span><span class="fact-val">Holkar — Maratha Confederacy</span></div>
+          <div class="fact-item"><span class="fact-key">Reign</span><span class="fact-val">1767 – 1795 (28 years)</span></div>
+          <div class="fact-item"><span class="fact-key">Capital</span><span class="fact-val">Maheshwar, Madhya Pradesh</span></div>
+          <div class="fact-item"><span class="fact-key">Religion</span><span class="fact-val">Shaiva Hindu (devoted to Lord Shiva)</span></div>
+          <div class="fact-item"><span class="fact-key">Known As</span><span class="fact-val">Lok Mata, Punyashloka</span></div>
+          <div class="fact-item"><span class="fact-key">Passed On</span><span class="fact-val">13 August 1795, Maheshwar</span></div>
+          <div class="fact-item"><span class="fact-key">Honored By</span><span class="fact-val">Government of India — "Punyashloka Ahilyabai Holkar Jayanti"</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CONTRIBUTIONS CARDS ========== -->
+  <div class="section-divider"></div>
+  <section class="section section--dark contributions-section" id="contributions">
+    <div class="container">
+      <div class="section-title reveal">
+        <span class="subtitle">Her Works, Her World</span>
+        <h2>Pillars of a Golden Reign</h2>
+      </div>
+      <div class="contrib-grid">
+        <div class="contrib-card reveal">
+          <span class="card-icon">🛕</span>
+          <h3 class="card-title-text">Temple Restoration & Construction</h3>
+          <p class="card-text">Ahilyabai personally funded and oversaw the rebuilding of countless temples — from Kashi Vishwanath at Varanasi, to Dwarka, Somnath, Ujjain, Gaya, Mathura, Ayodhya, and beyond. She restored sacred sites giving Hindus back their spiritual homes.</p>
+        </div>
+        <div class="contrib-card reveal">
+          <span class="card-icon">🏛️</span>
+          <h3 class="card-title-text">Just Governance</h3>
+          <p class="card-text">She held open court personally and heard petitions from the poorest citizens. Her administration was decentralized, with fair taxation. She abolished unjust practices and ensured widow inheritance rights.</p>
+        </div>
+        <div class="contrib-card reveal">
+          <span class="card-icon">🌉</span>
+          <h3 class="card-title-text">Infrastructure & Public Works</h3>
+          <p class="card-text">She built roads, wells, rest houses (dharmshalas), and ghats for pilgrims across the entire subcontinent. Travelers and merchants — regardless of caste, faith, or origin — benefited from safe roads and hospitality.</p>
+        </div>
+        <div class="contrib-card reveal">
+          <span class="card-icon">💰</span>
+          <h3 class="card-title-text">Economic Revival</h3>
+          <p class="card-text">Under her rule, Maheshwar became a thriving center of trade and weaving. She established the famous Maheshwari saree tradition — patronizing master weavers and creating a craft that still sustains thousands of families.</p>
+        </div>
+        <div class="contrib-card reveal">
+          <span class="card-icon">⚔️</span>
+          <h3 class="card-title-text">Military Leadership</h3>
+          <p class="card-text">Ahilyabai herself led armies into battle and was trained in warfare. She conducted military campaigns personally, sometimes riding on an elephant. She defended Malwa through diplomatic wisdom and military preparedness.</p>
+        </div>
+        <div class="contrib-card reveal">
+          <span class="card-icon">📚</span>
+          <h3 class="card-title-text">Education & Literature</h3>
+          <p class="card-text">She patronized Sanskrit scholars, poets, and thinkers. She funded manuscript preservation and Vedic schools. Her court at Maheshwar was a beacon of intellectual activity.</p>
+        </div>
+        <div class="contrib-card reveal">
+          <span class="card-icon">🌊</span>
+          <h3 class="card-title-text">Ghats & Pilgrimage Support</h3>
+          <p class="card-text">She constructed sacred river ghats at Varanasi, Maheshwar, and many other holy rivers. She arranged free food, shelter, and transport for pilgrims journeying to major sacred sites.</p>
+        </div>
+        <div class="contrib-card reveal">
+          <span class="card-icon">🤱</span>
+          <h3 class="card-title-text">Women's Welfare</h3>
+          <p class="card-text">Far ahead of her time, she championed women's rights. She gave widows the right to adopt and inherit property — a revolutionary policy in 18th-century India. She herself was a widow queen who defied convention.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TIMELINE ========== -->
+  <div class="section-divider"></div>
+  <section class="section timeline-section" id="timeline">
+    <div class="container">
+      <div class="section-title reveal">
+        <span class="subtitle">Her Journey Through Time</span>
+        <h2>A Life Written in Gold</h2>
+      </div>
+      <div class="timeline-wrapper">
+        <div class="timeline-line"></div>
+        <div class="timeline-events">
+          <div class="timeline-event reveal">
+            <div class="t-dot"></div>
+            <div class="t-year">1725</div>
+            <div class="t-content">
+              <div class="t-title">Birth in Chondi</div>
+              <div class="t-desc">Born on 31 May in the village of Chondi (Jamkhed), Maharashtra, to Mankoji Shinde. Raised with strong values, piety, and literacy — unusual for a girl of that era.</div>
+            </div>
+          </div>
+          <div class="timeline-event reveal">
+            <div class="t-dot"></div>
+            <div class="t-year">1733</div>
+            <div class="t-content">
+              <div class="t-title">Marriage to Khanderao Holkar</div>
+              <div class="t-desc">At age 8, Malhar Rao Holkar spotted her devotion at a temple and chose her as his daughter-in-law. She married Khanderao, the only son of the great Holkar commander.</div>
+            </div>
+          </div>
+          <div class="timeline-event reveal">
+            <div class="t-dot"></div>
+            <div class="t-year">1754</div>
+            <div class="t-content">
+              <div class="t-title">Battle of Kumbher — Widowhood</div>
+              <div class="t-desc">Her husband Khanderao was killed in battle. When she requested to commit Sati, her father-in-law Malhar Rao himself stopped her, saying she was destined for greater work.</div>
+            </div>
+          </div>
+          <div class="timeline-event reveal">
+            <div class="t-dot"></div>
+            <div class="t-year">1766</div>
+            <div class="t-content">
+              <div class="t-title">Death of Malhar Rao</div>
+              <div class="t-desc">Her mentor and father-figure Malhar Rao passed away. Her son Malerao was unfit to govern. The entire weight of the Holkar kingdom fell on Ahilyabai's shoulders.</div>
+            </div>
+          </div>
+          <div class="timeline-event reveal">
+            <div class="t-dot"></div>
+            <div class="t-year">1767</div>
+            <div class="t-content">
+              <div class="t-title">Assumption of the Throne</div>
+              <div class="t-desc">After her son Malerao's death, Ahilyabai formally assumed the reign of Malwa. She wrote to the Peshwa for permission — which was granted with respect.</div>
+            </div>
+          </div>
+          <div class="timeline-event reveal">
+            <div class="t-dot"></div>
+            <div class="t-year">1772</div>
+            <div class="t-content">
+              <div class="t-title">Maheshwar Made Capital</div>
+              <div class="t-desc">She shifted her capital from Indore to Maheshwar on the Narmada, transforming it into a cultural and spiritual powerhouse with forts, palaces, ghats, weavers, and scholars.</div>
+            </div>
+          </div>
+          <div class="timeline-event reveal">
+            <div class="t-dot"></div>
+            <div class="t-year">1780</div>
+            <div class="t-content">
+              <div class="t-title">Rebuilding Kashi Vishwanath</div>
+              <div class="t-desc">She funded the complete reconstruction of the Kashi Vishwanath Temple at Varanasi — one of the most sacred Shiva shrines — after its destruction. This remains her most celebrated act.</div>
+            </div>
+          </div>
+          <div class="timeline-event reveal">
+            <div class="t-dot"></div>
+            <div class="t-year">1795</div>
+            <div class="t-content">
+              <div class="t-title">Eternal Rest — 13 August</div>
+              <div class="t-desc">After 28 glorious years of rule, Ahilyabai departed from this world at Maheshwar. The entire Maratha empire mourned. She was 70 years old. Her legacy, however, was eternal.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TRIBUTE ========== -->
+  <div class="section-divider"></div>
+  <section class="section section--dark tribute-section" id="tribute">
+    <div class="container" style="text-align: center;">
+      <span class="tribute-word reveal">Punyashloka</span>
+      <span class="tribute-sub reveal text-devanagari">पुण्यश्लोका — She of Sacred Memory</span>
+      <div class="divider-ornament reveal">
+        <span></span>
+        <span class="divider-icon">🪔</span>
+        <span></span>
+      </div>
+      <p class="tribute-text reveal">
+        Ahilyabai Holkar is not simply a historical figure. She is the conscience of a civilization. In an age when women had no voice, she was a roar. In an age of plunder, she was a builder. In an age of darkness, she was a deepak — a flame that cannot be extinguished.
+      </p>
+      <p class="tribute-lamp-note reveal">
+        🪔 Every visitor to this page lights a Deepak in her honor 🪔
+      </p>
     </div>
   </section>
 

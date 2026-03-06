@@ -146,6 +146,32 @@
   box-shadow: 0 0 30px rgba(255, 160, 50, 0.6);
 }
 
+/* Floating deepak animation */
+.floating-deepak {
+  position: fixed;
+  bottom: -40px;
+  z-index: 0;
+  pointer-events: none;
+  animation: floatDeepakUp linear forwards;
+}
+
+@keyframes floatDeepakUp {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .deepak__digit-wrapper {
     height: 48px;

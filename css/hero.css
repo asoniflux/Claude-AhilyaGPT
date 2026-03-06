@@ -1,6 +1,18 @@
 /* ============================================
-   Hero Section
+   Hero Section — Enhanced with SVG Mandala,
+   CSS Deepak, Scroll Indicator, Grain Overlay
    ============================================ */
+
+/* Grain overlay on body */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
 
 .hero {
   min-height: 100vh;
@@ -10,63 +22,48 @@
   justify-content: center;
   text-align: center;
   position: relative;
-  background: linear-gradient(
-    135deg,
-    var(--maroon-deep) 0%,
-    var(--maroon) 40%,
-    #5A1525 70%,
-    var(--charcoal) 100%
-  );
+  background: radial-gradient(ellipse at 50% 30%, #3D1A00 0%, #1A0A00 40%, var(--charcoal) 100%);
   overflow: hidden;
   padding: var(--space-xl);
 }
 
-/* Mandala overlay pattern */
-.hero::before {
-  content: '';
+/* SVG Mandala background */
+.mandala-bg {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 800px;
-  height: 800px;
-  border-radius: 50%;
-  background: radial-gradient(circle,
-    transparent 30%,
-    rgba(197, 163, 85, 0.03) 31%,
-    transparent 32%,
-    transparent 40%,
-    rgba(197, 163, 85, 0.03) 41%,
-    transparent 42%,
-    transparent 50%,
-    rgba(197, 163, 85, 0.04) 51%,
-    transparent 52%,
-    transparent 60%,
-    rgba(197, 163, 85, 0.03) 61%,
-    transparent 62%,
-    transparent 70%,
-    rgba(197, 163, 85, 0.02) 71%,
-    transparent 72%,
-    transparent 80%,
-    rgba(197, 163, 85, 0.02) 81%,
-    transparent 82%
-  );
-  animation: spin 120s linear infinite;
-  pointer-events: none;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.08;
+  animation: slowRotate 120s linear infinite;
 }
 
-/* Second mandala ring */
-.hero::after {
-  content: '';
+.mandala-bg svg {
+  width: min(900px, 130vw);
+  height: min(900px, 130vw);
+}
+
+@keyframes slowRotate {
+  to { transform: rotate(360deg); }
+}
+
+/* Pulsing glow behind hero content */
+.hero-glow {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  border: 1px solid rgba(197, 163, 85, 0.08);
+  background: radial-gradient(circle, rgba(212, 137, 26, 0.18) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: heroGlowPulse 4s ease-in-out infinite;
   pointer-events: none;
+}
+
+@keyframes heroGlowPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
 }
 
 .hero__particles {
@@ -79,52 +76,79 @@
 .hero__content {
   position: relative;
   z-index: var(--z-base);
-  animation: fadeSlideUp 1.2s ease-out;
+  animation: heroReveal 1.8s ease both;
+}
+
+@keyframes heroReveal {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .hero__tag {
   display: inline-block;
-  font-family: var(--font-accent);
-  font-size: var(--text-sm);
-  color: var(--gold);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: var(--space-md);
-  opacity: 0.8;
+  font-family: 'Tiro Devanagari Hindi', var(--font-accent);
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  color: var(--saffron-light);
+  letter-spacing: 0.15em;
+  margin-bottom: 1.2rem;
+  animation: heroReveal 1.8s 0.2s ease both;
 }
 
 .hero__title {
-  font-family: var(--font-heading);
-  font-size: var(--text-4xl);
+  font-family: 'Cinzel Decorative', var(--font-heading);
+  font-size: clamp(2.2rem, 6vw, 5.5rem);
   font-weight: 900;
-  color: var(--gold);
+  background: linear-gradient(135deg, #FBE8A6 0%, #D4891A 40%, #FF6B1A 70%, #F5C842 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   line-height: 1.1;
-  margin-bottom: var(--space-md);
-  text-shadow: 0 2px 40px rgba(197, 163, 85, 0.3);
+  letter-spacing: 0.02em;
+  filter: drop-shadow(0 0 30px rgba(212, 137, 26, 0.5));
+  animation: heroReveal 1.8s 0.4s ease both;
+  margin-bottom: var(--space-sm);
 }
 
-.hero__title span {
+.hero__subtitle-line {
   display: block;
-  font-size: 0.5em;
-  font-weight: 400;
-  color: var(--gold-light);
-  margin-top: var(--space-sm);
-  letter-spacing: 4px;
+  font-family: 'Cinzel Decorative', var(--font-heading);
+  font-size: clamp(1rem, 2vw, 1.6rem);
+  color: #FBE8A6;
+  letter-spacing: 0.3em;
+  margin-top: 0.8rem;
+  animation: heroReveal 1.8s 0.6s ease both;
 }
 
-.hero__sloka {
-  font-family: var(--font-accent);
-  font-size: var(--text-lg);
-  color: rgba(232, 213, 163, 0.7);
+.hero__ornament {
+  color: var(--gold);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  letter-spacing: 0.5em;
+  margin: 1.2rem 0;
+  display: block;
+  animation: heroReveal 1.8s 0.8s ease both;
+}
+
+.hero__tagline {
+  font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  margin-bottom: var(--space-xl);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  color: #C8A96E;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+  animation: heroReveal 1.8s 1s ease both;
+}
+
+.hero__dates {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  color: #C8A96E;
+  letter-spacing: 0.2em;
+  animation: heroReveal 1.8s 1.2s ease both;
 }
 
 .hero__cta {
-  margin-bottom: var(--space-3xl);
+  animation: heroReveal 1.8s 1.4s ease both;
 }
 
 /* Deepak in hero */
@@ -134,12 +158,17 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
+  margin-top: var(--space-lg);
+  animation: heroReveal 1.8s 1.6s ease both;
 }
 
 .hero__deepak-counter {
-  font-family: var(--font-heading);
+  font-family: 'Cinzel Decorative', var(--font-heading);
   font-size: var(--text-2xl);
-  color: var(--gold);
+  background: linear-gradient(to right, #FBE8A6, #FF6B1A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -152,9 +181,180 @@
   max-width: 300px;
 }
 
+/* ─── CSS DEEPAK (OIL LAMP) ─── */
+.css-deepak {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+}
+
+.css-lamp-base {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 14px;
+  background: linear-gradient(to bottom, var(--gold) 0%, #8B5E0A 100%);
+  border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+  box-shadow: 0 2px 8px rgba(212, 137, 26, 0.4);
+}
+
+.css-lamp-stem {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 10px;
+  background: var(--gold);
+}
+
+.css-lamp-plate {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 8px;
+  background: linear-gradient(to bottom, #F5C842, var(--gold));
+  border-radius: 50%;
+}
+
+.css-wick {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 5px;
+  background: #4A2800;
+  border-radius: 2px 2px 0 0;
+}
+
+.css-flame {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 20px;
+}
+
+.css-flame-outer {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 20px;
+  background: radial-gradient(ellipse at 50% 100%, #FF4500 0%, #FF8C00 50%, #FFD700 80%, transparent 100%);
+  border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+  animation: cssFlicker 0.15s ease-in-out infinite alternate;
+  filter: blur(0.5px);
+}
+
+.css-flame-inner {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 12px;
+  background: radial-gradient(ellipse at 50% 100%, #fff 0%, #F5C842 60%, transparent 100%);
+  border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+  animation: cssFlicker2 0.2s ease-in-out infinite alternate;
+  filter: blur(0.3px);
+}
+
+.flame-glow-hero {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  background: radial-gradient(circle, rgba(255, 180, 0, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: glowPulseHero 1s ease-in-out infinite alternate;
+}
+
+@keyframes cssFlicker {
+  0% { transform: translateX(-50%) scaleX(1) scaleY(1) rotate(-1deg); }
+  100% { transform: translateX(-50%) scaleX(0.88) scaleY(1.05) rotate(1deg); }
+}
+
+@keyframes cssFlicker2 {
+  0% { transform: translateX(-50%) scaleX(1) scaleY(1) rotate(1deg); }
+  100% { transform: translateX(-50%) scaleX(0.92) scaleY(1.08) rotate(-1deg); }
+}
+
+@keyframes glowPulseHero {
+  from { opacity: 0.5; transform: translateX(-50%) scale(1); }
+  to { opacity: 1; transform: translateX(-50%) scale(1.2); }
+}
+
+/* ─── SCROLL INDICATOR ─── */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--gold);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  animation: fadeInUpScroll 2s 2s both;
+  z-index: 2;
+}
+
+.scroll-indicator::after {
+  content: '';
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+
+@keyframes scrollLine {
+  0%, 100% { opacity: 0.4; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.1); }
+}
+
+@keyframes fadeInUpScroll {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ─── FLOATING DEEPAKS (spawned on page load) ─── */
+.float-deepak {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  font-size: 1.5rem;
+  animation: floatUpDeepak 3s ease-out forwards;
+}
+
+@keyframes floatUpDeepak {
+  0% { opacity: 1; transform: translateY(0) scale(1) rotate(-10deg); }
+  50% { opacity: 0.8; transform: translateY(-150px) scale(1.2) rotate(5deg); }
+  100% { opacity: 0; transform: translateY(-300px) scale(0.6) rotate(15deg); }
+}
+
 @media (max-width: 768px) {
-  .hero::before {
-    width: 500px;
-    height: 500px;
+  .hero-glow {
+    width: 350px;
+    height: 350px;
+  }
+  .scroll-indicator {
+    bottom: 1rem;
+    font-size: 0.6rem;
+  }
+  .scroll-indicator::after {
+    height: 40px;
   }
 }
