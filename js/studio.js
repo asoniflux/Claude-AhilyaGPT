@@ -1,9 +1,10 @@
 /* ============================================
-   AI Media Creation Studio
+   AI Media Creation Studio + Photo Upload
    ============================================ */
 
 var studioGenCount = 0;
 var galleryItems = [];
+var uploadedImageData = null;
 
 // CSS gradient art generators
 var artStyles = {
@@ -41,6 +42,34 @@ var locationIcons = {
   maheshwar: '🏰', narmada: '🌊', kashi: '🛕', court: '👑', battlefield: '⚔️'
 };
 
+// Royal overlay styles for AI photo
+var royalStyles = {
+  maratha: {
+    label: 'Maratha Royal',
+    overlay: 'linear-gradient(180deg, rgba(107, 29, 42, 0) 0%, rgba(107, 29, 42, 0) 40%, rgba(107, 29, 42, 0.6) 70%, rgba(74, 14, 28, 0.9) 100%)',
+    filter: 'sepia(0.4) saturate(1.3) contrast(1.1) brightness(0.95)',
+    border: 'linear-gradient(135deg, #C5A355, #8B7332, #C5A355)'
+  },
+  mughal: {
+    label: 'Mughal Miniature',
+    overlay: 'linear-gradient(180deg, rgba(26, 58, 42, 0) 0%, rgba(26, 58, 42, 0) 40%, rgba(26, 58, 42, 0.5) 70%, rgba(15, 40, 28, 0.9) 100%)',
+    filter: 'sepia(0.6) saturate(1.5) contrast(1.05) hue-rotate(-10deg)',
+    border: 'linear-gradient(135deg, #C5A355, #2A6B4B, #C5A355)'
+  },
+  oil: {
+    label: 'Oil Painting',
+    overlay: 'linear-gradient(180deg, rgba(44, 36, 32, 0) 0%, rgba(44, 36, 32, 0) 40%, rgba(44, 36, 32, 0.5) 70%, rgba(30, 24, 20, 0.9) 100%)',
+    filter: 'sepia(0.3) saturate(0.8) contrast(1.2) brightness(0.9)',
+    border: 'linear-gradient(135deg, #8B7332, #4A3520, #8B7332)'
+  },
+  golden: {
+    label: 'Golden Age',
+    overlay: 'linear-gradient(180deg, rgba(197, 163, 85, 0.1) 0%, rgba(197, 163, 85, 0) 30%, rgba(139, 115, 50, 0.4) 70%, rgba(74, 14, 28, 0.85) 100%)',
+    filter: 'sepia(0.5) saturate(1.4) contrast(1.15) brightness(1.05)',
+    border: 'linear-gradient(135deg, #F5C842, #C5A355, #F5C842)'
+  }
+};
+
 function initStudio() {
   // Tab switching
   document.getElementById('studio-tabs').addEventListener('click', function (e) {
@@ -68,6 +97,40 @@ function initStudio() {
       generateArt(type);
     });
   });
+
+  // Photo upload
+  var uploadInput = document.getElementById('photo-upload-input');
+  var uploadBtn = document.getElementById('photo-upload-btn');
+  var transformBtn = document.getElementById('photo-transform-btn');
+
+  if (uploadBtn && uploadInput) {
+    uploadBtn.addEventListener('click', function () {
+      uploadInput.click();
+    });
+
+    uploadInput.addEventListener('change', function (e) {
+      var file = e.target.files[0];
+      if (!file) return;
+
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        uploadedImageData = ev.target.result;
+        // Show preview
+        var preview = document.getElementById('photo-preview');
+        preview.innerHTML = '<img src="' + uploadedImageData + '" alt="Your photo" class="photo-preview-img">';
+        preview.classList.add('photo-preview--visible');
+        if (transformBtn) transformBtn.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  if (transformBtn) {
+    transformBtn.addEventListener('click', function () {
+      if (!uploadedImageData) return;
+      generateRoyalPortrait();
+    });
+  }
 }
 
 function generateArt(type) {
@@ -106,6 +169,50 @@ function generateArt(type) {
     // Badge
     EventBus.emit('badge:increment', { badge: 'royalArtist' });
   }, 2000);
+}
+
+function generateRoyalPortrait() {
+  if (!uploadedImageData) return;
+
+  var grid = document.getElementById('gallery-grid');
+  var style = document.getElementById('photo-style').value;
+  var royalStyle = royalStyles[style] || royalStyles.maratha;
+
+  // Remove empty state
+  var empty = grid.querySelector('.studio__empty');
+  if (empty) empty.remove();
+
+  // Show loading
+  var loadingEl = document.createElement('div');
+  loadingEl.className = 'studio__loading';
+  loadingEl.innerHTML = '<div class="studio__loading-spinner"></div><p class="studio__loading-text">Transforming into a royal portrait...</p>';
+  grid.insertBefore(loadingEl, grid.firstChild);
+
+  setTimeout(function () {
+    loadingEl.remove();
+
+    var item = document.createElement('div');
+    item.className = 'studio__gallery-item studio__gallery-item--royal';
+    item.innerHTML =
+      '<div class="royal-portrait">' +
+        '<div class="royal-portrait__frame" style="background: ' + royalStyle.border + '; padding: 4px;">' +
+          '<div class="royal-portrait__inner">' +
+            '<img src="' + uploadedImageData + '" alt="Royal Portrait" class="royal-portrait__img" style="filter: ' + royalStyle.filter + ';">' +
+            '<div class="royal-portrait__overlay" style="background: ' + royalStyle.overlay + ';"></div>' +
+            '<div class="royal-portrait__ornament royal-portrait__ornament--top"></div>' +
+            '<div class="royal-portrait__ornament royal-portrait__ornament--bottom"></div>' +
+            '<span class="royal-portrait__label">' + royalStyle.label + ' Portrait</span>' +
+            '<span class="royal-portrait__crest">👑</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    grid.insertBefore(item, grid.firstChild);
+    studioGenCount++;
+
+    // Badge
+    EventBus.emit('badge:increment', { badge: 'royalArtist' });
+  }, 2500);
 }
 
 function buildGradient(type) {

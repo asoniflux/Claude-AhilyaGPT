@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/hero.css">
   <link rel="stylesheet" href="css/content.css">
+  <link rel="stylesheet" href="css/quotes.css">
   <link rel="stylesheet" href="css/court.css">
   <link rel="stylesheet" href="css/map.css">
   <link rel="stylesheet" href="css/studio.css">
@@ -34,19 +35,26 @@
 </head>
 <body>
 
+  <!-- ========== LANGUAGE SWITCHER ========== -->
+  <div class="lang-switcher" id="lang-switcher">
+    <button class="lang-btn lang-btn--active" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="hi">हिं</button>
+    <button class="lang-btn" data-lang="mr">मर</button>
+  </div>
+
   <!-- ========== NAVIGATION ========== -->
   <nav class="nav" id="main-nav">
     <div class="nav__inner">
       <a href="#hero" class="nav__logo text-devanagari">अहिल्या</a>
 
       <div class="nav__links" id="nav-links">
-        <a href="#biography" class="nav__link" data-section="biography">Biography</a>
-        <a href="#contributions" class="nav__link" data-section="contributions">Contributions</a>
-        <a href="#court" class="nav__link" data-section="court">Darbar</a>
-        <a href="#sacred-map" class="nav__link" data-section="sacred-map">Sacred Map</a>
-        <a href="#studio" class="nav__link" data-section="studio">Studio</a>
-        <a href="#dashboard" class="nav__link" data-section="dashboard">Dashboard</a>
-        <a href="#deepak-section" class="nav__link" data-section="deepak-section">Deepak</a>
+        <a href="#biography" class="nav__link" data-section="biography" data-i18n="nav.biography">Biography</a>
+        <a href="#contributions" class="nav__link" data-section="contributions" data-i18n="nav.contributions">Contributions</a>
+        <a href="#court" class="nav__link" data-section="court" data-i18n="nav.court">Darbar</a>
+        <a href="#sacred-map" class="nav__link" data-section="sacred-map" data-i18n="nav.map">Sacred Map</a>
+        <a href="#studio" class="nav__link" data-section="studio" data-i18n="nav.studio">Studio</a>
+        <a href="#dashboard" class="nav__link" data-section="dashboard" data-i18n="nav.dashboard">Dashboard</a>
+        <a href="#deepak-section" class="nav__link" data-section="deepak-section" data-i18n="nav.deepak">Deepak</a>
         <button class="nav__badge-btn" id="badge-toggle" aria-label="View badges">
           🏆
           <span class="nav__badge-count" id="badge-count">0</span>
@@ -62,13 +70,13 @@
 
     <!-- Mobile drawer -->
     <div class="nav__drawer" id="nav-drawer">
-      <a href="#biography" class="nav__link" data-section="biography">Biography</a>
-      <a href="#contributions" class="nav__link" data-section="contributions">Contributions</a>
-      <a href="#court" class="nav__link" data-section="court">Darbar</a>
-      <a href="#sacred-map" class="nav__link" data-section="sacred-map">Sacred Map</a>
-      <a href="#studio" class="nav__link" data-section="studio">Studio</a>
-      <a href="#dashboard" class="nav__link" data-section="dashboard">Dashboard</a>
-      <a href="#deepak-section" class="nav__link" data-section="deepak-section">Deepak</a>
+      <a href="#biography" class="nav__link" data-section="biography" data-i18n="nav.biography">Biography</a>
+      <a href="#contributions" class="nav__link" data-section="contributions" data-i18n="nav.contributions">Contributions</a>
+      <a href="#court" class="nav__link" data-section="court" data-i18n="nav.court">Darbar</a>
+      <a href="#sacred-map" class="nav__link" data-section="sacred-map" data-i18n="nav.map">Sacred Map</a>
+      <a href="#studio" class="nav__link" data-section="studio" data-i18n="nav.studio">Studio</a>
+      <a href="#dashboard" class="nav__link" data-section="dashboard" data-i18n="nav.dashboard">Dashboard</a>
+      <a href="#deepak-section" class="nav__link" data-section="deepak-section" data-i18n="nav.deepak">Deepak</a>
       <button class="nav__badge-btn" id="badge-toggle-mobile" aria-label="View badges">
         🏆 Badges <span class="nav__badge-count" id="badge-count-mobile">0</span>
       </button>
@@ -116,19 +124,19 @@
     <div class="hero-glow"></div>
 
     <div class="hero__content">
-      <span class="hero__tag hindi-subtitle">॥ जय माँ अहिल्याबाई होलकर ॥</span>
-      <h1 class="hero__title">
+      <span class="hero__tag hindi-subtitle" data-i18n="hero.tag">॥ जय माँ अहिल्याबाई होलकर ॥</span>
+      <h1 class="hero__title" data-i18n="hero.title" data-i18n-html="1">
         Devi Ahilyabai<br>Holkar
       </h1>
-      <span class="hero__subtitle-line">Lok Mata &nbsp;·&nbsp; The Eternal Queen of Malwa</span>
+      <span class="hero__subtitle-line" data-i18n="hero.subtitle" data-i18n-html="1">Lok Mata &nbsp;·&nbsp; The Eternal Queen of Malwa</span>
       <span class="hero__ornament">✦ ❧ ✦ ❧ ✦</span>
-      <p class="hero__tagline">
+      <p class="hero__tagline" data-i18n="hero.tagline">
         "She who ruled with justice, built with devotion, and loved with the heart of a mother — not just a queen, but the soul of a civilization."
       </p>
-      <p class="hero__dates">31 May 1725 &nbsp;—&nbsp; 13 August 1795</p>
+      <p class="hero__dates" data-i18n="hero.dates" data-i18n-html="1">31 May 1725 &nbsp;—&nbsp; 13 August 1795</p>
 
       <div class="hero__cta" style="margin-top: 2rem;">
-        <a href="#intro-section" class="btn btn--shimmer btn--lg">Begin the Journey</a>
+        <a href="#intro-section" class="btn btn--shimmer btn--lg" data-i18n="hero.cta">Begin the Journey</a>
       </div>
 
       <div class="hero__deepak">
@@ -147,7 +155,7 @@
         <div class="hero__deepak-counter" id="hero-counter">
           <span id="hero-counter-number">0</span>+
         </div>
-        <p class="hero__deepak-label">Virtual deepaks lit in tribute to Lok Mata Ahilya Bai</p>
+        <p class="hero__deepak-label" data-i18n="hero.deepakLabel">Virtual deepaks lit in tribute to Lok Mata Ahilya Bai</p>
       </div>
     </div>
 
@@ -161,11 +169,11 @@
   <section class="section section--dark intro-quote-section" id="intro-section">
     <div class="container">
       <div class="intro-bg reveal">
-        <span class="section-label">A Word From History</span>
-        <blockquote class="hero-quote">
+        <span class="section-label" data-i18n="intro.label">A Word From History</span>
+        <blockquote class="hero-quote" data-i18n="intro.quote">
           "In the galaxy of rulers who have adorned the pages of Indian history, Ahilyabai Holkar shines as a star of the first magnitude — a monarch whose life and reign remain to this day an inspiring example of what devoted, just, and wise governance truly means."
         </blockquote>
-        <p class="quote-attribution">— Historical accounts of the Maratha Empire</p>
+        <p class="quote-attribution" data-i18n="intro.attribution">— Historical accounts of the Maratha Empire</p>
       </div>
     </div>
   </section>
@@ -175,8 +183,8 @@
   <section class="section biography-section" id="biography">
     <div class="container">
       <div class="section-title reveal">
-        <span class="subtitle">Her Story</span>
-        <h2>Born of Dust, Made of Gold</h2>
+        <span class="subtitle" data-i18n="bio.subtitle">Her Story</span>
+        <h2 data-i18n="bio.title">Born of Dust, Made of Gold</h2>
       </div>
       <div class="bio-grid reveal">
         <div class="bio-text">
@@ -186,7 +194,7 @@
           <p>In 1767, at 42 years of age, she assumed full reign of the Holkar state of Malwa, ruling from her capital at Maheshwar on the banks of the sacred Narmada. For 28 years, she governed with a wisdom that made her contemporaries, including Peshwas and British observers, regard her with awe.</p>
         </div>
         <div class="bio-facts">
-          <span class="section-label" style="margin-bottom: 1rem; display: block;">Quick Facts</span>
+          <span class="section-label" data-i18n="bio.facts.title" style="margin-bottom: 1rem; display: block;">Quick Facts</span>
           <div class="fact-item"><span class="fact-key">Born</span><span class="fact-val">31 May 1725, Chondi, Maharashtra</span></div>
           <div class="fact-item"><span class="fact-key">Dynasty</span><span class="fact-val">Holkar — Maratha Confederacy</span></div>
           <div class="fact-item"><span class="fact-key">Reign</span><span class="fact-val">1767 – 1795 (28 years)</span></div>
@@ -205,8 +213,8 @@
   <section class="section section--dark contributions-section" id="contributions">
     <div class="container">
       <div class="section-title reveal">
-        <span class="subtitle">Her Works, Her World</span>
-        <h2>Pillars of a Golden Reign</h2>
+        <span class="subtitle" data-i18n="contrib.subtitle">Her Works, Her World</span>
+        <h2 data-i18n="contrib.title">Pillars of a Golden Reign</h2>
       </div>
       <div class="contrib-grid">
         <div class="contrib-card reveal">
@@ -253,13 +261,47 @@
     </div>
   </section>
 
+  <!-- ========== HISTORICAL QUOTES CAROUSEL ========== -->
+  <div class="section-divider"></div>
+  <section class="section section--dark quotes-section" id="quotes">
+    <div class="container">
+      <div class="section-title reveal">
+        <span class="subtitle" data-i18n="quotes.subtitle">Voices Through Time</span>
+        <h2 data-i18n="quotes.title">What The World Said</h2>
+      </div>
+      <div class="quotes-carousel" id="quotes-carousel">
+        <div class="quote-card" id="quote-card">
+          <span class="quote-type" id="quote-type"></span>
+          <p class="quote-text" id="quote-text"></p>
+          <p class="quote-author" id="quote-author"></p>
+          <p class="quote-context" id="quote-context"></p>
+        </div>
+      </div>
+      <div class="quote-nav reveal">
+        <button class="quote-nav-btn" id="quote-prev">&#8592;</button>
+        <div class="quote-dots" id="quote-dots">
+          <span class="quote-dot quote-dot--active" data-index="0"></span>
+          <span class="quote-dot" data-index="1"></span>
+          <span class="quote-dot" data-index="2"></span>
+          <span class="quote-dot" data-index="3"></span>
+          <span class="quote-dot" data-index="4"></span>
+          <span class="quote-dot" data-index="5"></span>
+          <span class="quote-dot" data-index="6"></span>
+          <span class="quote-dot" data-index="7"></span>
+          <span class="quote-dot" data-index="8"></span>
+        </div>
+        <button class="quote-nav-btn" id="quote-next">&#8594;</button>
+      </div>
+    </div>
+  </section>
+
   <!-- ========== TIMELINE ========== -->
   <div class="section-divider"></div>
   <section class="section timeline-section" id="timeline">
     <div class="container">
       <div class="section-title reveal">
-        <span class="subtitle">Her Journey Through Time</span>
-        <h2>A Life Written in Gold</h2>
+        <span class="subtitle" data-i18n="timeline.subtitle">Her Journey Through Time</span>
+        <h2 data-i18n="timeline.title">A Life Written in Gold</h2>
       </div>
       <div class="timeline-wrapper">
         <div class="timeline-line"></div>
@@ -338,16 +380,16 @@
   <section class="section section--dark tribute-section" id="tribute">
     <div class="container" style="text-align: center;">
       <span class="tribute-word reveal">Punyashloka</span>
-      <span class="tribute-sub reveal text-devanagari">पुण्यश्लोका — She of Sacred Memory</span>
+      <span class="tribute-sub reveal text-devanagari" data-i18n="tribute.sub">पुण्यश्लोका — She of Sacred Memory</span>
       <div class="divider-ornament reveal">
         <span></span>
         <span class="divider-icon">🪔</span>
         <span></span>
       </div>
-      <p class="tribute-text reveal">
+      <p class="tribute-text reveal" data-i18n="tribute.text">
         Ahilyabai Holkar is not simply a historical figure. She is the conscience of a civilization. In an age when women had no voice, she was a roar. In an age of plunder, she was a builder. In an age of darkness, she was a deepak — a flame that cannot be extinguished.
       </p>
-      <p class="tribute-lamp-note reveal">
+      <p class="tribute-lamp-note reveal" data-i18n="tribute.lamp" data-i18n-html="1">
         🪔 Every visitor to this page lights a Deepak in her honor 🪔
       </p>
     </div>
@@ -358,9 +400,9 @@
   <section class="section court" id="court">
     <div class="container">
       <div class="section-title reveal">
-        <span class="subtitle">AhilyaGPT</span>
-        <h2>The Royal Court</h2>
-        <p class="description">Tap to hear from historical figures of Ahilya Bai's era. Each persona shares their perspective on her legendary reign.</p>
+        <span class="subtitle" data-i18n="court.subtitle">AhilyaGPT</span>
+        <h2 data-i18n="court.title">The Royal Court</h2>
+        <p class="description" data-i18n="court.desc">Tap to hear from historical figures of Ahilya Bai's era. Each persona shares their perspective on her legendary reign.</p>
       </div>
       <div class="court__grid reveal--stagger" id="court-grid">
         <!-- Cards injected by court.js -->
@@ -373,23 +415,23 @@
   <section class="section sacred-map" id="sacred-map">
     <div class="container">
       <div class="section-title reveal">
-        <span class="subtitle">The Sacred Blueprint</span>
-        <h2>Her Philanthropic Footprint</h2>
-        <p class="description">An interactive map of India showcasing Ahilya Bai's temples, ghats, dharamshalas, and wells across the subcontinent.</p>
+        <span class="subtitle" data-i18n="map.subtitle">The Sacred Blueprint</span>
+        <h2 data-i18n="map.title">Her Philanthropic Footprint</h2>
+        <p class="description" data-i18n="map.desc">An interactive map of India showcasing Ahilya Bai's temples, ghats, dharamshalas, and wells across the subcontinent.</p>
       </div>
 
       <div class="map-filters reveal" id="map-filters">
         <button class="map-filter map-filter--temple active" data-type="temple">
-          <span class="map-filter__dot"></span> Temples
+          <span class="map-filter__dot"></span> <span data-i18n="map.temples">Temples</span>
         </button>
         <button class="map-filter map-filter--ghat active" data-type="ghat">
-          <span class="map-filter__dot"></span> Ghats
+          <span class="map-filter__dot"></span> <span data-i18n="map.ghats">Ghats</span>
         </button>
         <button class="map-filter map-filter--dharmshala active" data-type="dharmshala">
-          <span class="map-filter__dot"></span> Dharmshalas
+          <span class="map-filter__dot"></span> <span data-i18n="map.dharmshalas">Dharmshalas</span>
         </button>
         <button class="map-filter map-filter--well active" data-type="well">
-          <span class="map-filter__dot"></span> Wells
+          <span class="map-filter__dot"></span> <span data-i18n="map.wells">Wells</span>
         </button>
       </div>
 
@@ -406,9 +448,9 @@
   <section class="section studio" id="studio">
     <div class="container">
       <div class="section-title reveal">
-        <span class="subtitle">AI Media Creation</span>
-        <h2>The Studio</h2>
-        <p class="description">Generate cinematic scenes, portraits, and traditional Maheshwari sari patterns inspired by the era of Ahilya Bai.</p>
+        <span class="subtitle" data-i18n="studio.subtitle">AI Media Creation</span>
+        <h2 data-i18n="studio.title">The Studio</h2>
+        <p class="description" data-i18n="studio.desc">Generate cinematic scenes, portraits, and traditional Maheshwari sari patterns inspired by the era of Ahilya Bai.</p>
       </div>
 
       <div class="studio__layout">
@@ -417,6 +459,7 @@
             <button class="tab tab--active" data-tab="scene">Cinematic Scene</button>
             <button class="tab" data-tab="portrait">Portrait</button>
             <button class="tab" data-tab="sari">Maheshwari Sari</button>
+            <button class="tab" data-tab="photo" data-i18n="studio.photoTab">AI Photo</button>
           </div>
 
           <!-- Scene tab -->
@@ -548,10 +591,37 @@
               </button>
             </div>
           </div>
+
+          <!-- AI Photo tab -->
+          <div class="studio__tab-panel" id="tab-photo">
+            <div class="studio__form">
+              <div class="photo-upload-area">
+                <div class="photo-upload-icon">📷</div>
+                <p class="photo-upload-text" data-i18n="studio.uploadPrompt">Upload your photo to transform into a royal portrait</p>
+                <input type="file" accept="image/*" id="photo-upload-input" style="display: none;">
+                <button class="btn btn--outline" id="photo-upload-btn" data-i18n="studio.uploadBtn">📷 Upload Photo</button>
+              </div>
+              <div class="photo-preview" id="photo-preview"></div>
+              <div class="studio__form-group">
+                <label>Royal Style</label>
+                <div class="select-wrapper">
+                  <select id="photo-style">
+                    <option value="maratha">Maratha Royal</option>
+                    <option value="mughal">Mughal Miniature</option>
+                    <option value="oil">Oil Painting</option>
+                    <option value="golden">Golden Age</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn--shimmer btn--lg" id="photo-transform-btn" style="display: none; width: 100%;" data-i18n="studio.transformBtn">
+                ✨ Transform to Royal Portrait
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="studio__gallery reveal--right" id="studio-gallery">
-          <h3 class="studio__gallery-title">Gallery</h3>
+          <h3 class="studio__gallery-title" data-i18n="studio.gallery">Gallery</h3>
           <div class="studio__gallery-grid" id="gallery-grid">
             <div class="studio__empty">
               <div class="studio__empty-icon">🎨</div>
@@ -568,9 +638,9 @@
   <section class="section dashboard" id="dashboard">
     <div class="container">
       <div class="section-title reveal">
-        <span class="subtitle">State Pride Summary</span>
-        <h2>Share Her Legacy</h2>
-        <p class="description">Select a state to discover Ahilya Bai's local contributions and share them with your community.</p>
+        <span class="subtitle" data-i18n="dash.subtitle">State Pride Summary</span>
+        <h2 data-i18n="dash.title">Share Her Legacy</h2>
+        <p class="description" data-i18n="dash.desc">Select a state to discover Ahilya Bai's local contributions and share them with your community.</p>
       </div>
 
       <div class="dashboard__controls reveal">
@@ -635,40 +705,83 @@
   <section class="section deepak-section" id="deepak-section">
     <div class="container">
       <div class="section-title reveal">
-        <span class="subtitle">A Tribute of Light</span>
-        <h2>The Deepak Counter</h2>
-        <p class="description">Light a virtual deepak to honor the legacy of Lok Mata Ahilya Bai. Every flame is a prayer, every light a memory.</p>
+        <span class="subtitle" data-i18n="deepak.subtitle">A Tribute of Light</span>
+        <h2 data-i18n="deepak.title">The Deepak Counter</h2>
+        <p class="description" data-i18n="deepak.desc">Light a virtual deepak to honor the legacy of Lok Mata Ahilya Bai. Every flame is a prayer, every light a memory.</p>
       </div>
 
       <div class="deepak__display reveal">
-        <div class="deepak__flame-container">
-          <svg class="deepak__flame" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Lamp base -->
-            <ellipse cx="60" cy="145" rx="40" ry="8" fill="#8B7332"/>
-            <ellipse cx="60" cy="140" rx="35" ry="6" fill="#C5A355"/>
-            <path d="M30 140 Q30 120 45 115 L75 115 Q90 120 90 140" fill="#8B7332"/>
-            <path d="M35 138 Q35 122 47 118 L73 118 Q85 122 85 138" fill="#C5A355"/>
-            <!-- Wick -->
-            <rect x="57" y="100" width="6" height="18" rx="3" fill="#4A3520"/>
-            <!-- Flame -->
-            <g class="deepak-flame-group" style="animation: flicker 2s ease-in-out infinite; transform-origin: 60px 80px;">
-              <path d="M60 30 Q70 55 68 75 Q65 90 60 95 Q55 90 52 75 Q50 55 60 30Z" fill="#FF6B00" opacity="0.9"/>
-              <path d="M60 40 Q67 58 65 72 Q63 85 60 88 Q57 85 55 72 Q53 58 60 40Z" fill="#FFA500" opacity="0.95"/>
-              <path d="M60 50 Q64 62 63 72 Q62 80 60 82 Q58 80 57 72 Q56 62 60 50Z" fill="#FFD700"/>
-              <path d="M60 58 Q62 65 61 72 Q60 76 60 77 Q60 76 59 72 Q58 65 60 58Z" fill="#FFFACD"/>
-            </g>
-          </svg>
-          <div class="deepak__flame-glow"></div>
+
+        <!-- Premium Deepak Lamp -->
+        <div class="deepak-lamp">
+          <div class="deepak-lamp__glow"></div>
+
+          <!-- Light rays -->
+          <div class="deepak-lamp__rays">
+            <div class="deepak-lamp__ray" style="transform: rotate(0deg);"></div>
+            <div class="deepak-lamp__ray" style="transform: rotate(30deg);"></div>
+            <div class="deepak-lamp__ray" style="transform: rotate(60deg);"></div>
+            <div class="deepak-lamp__ray" style="transform: rotate(90deg);"></div>
+            <div class="deepak-lamp__ray" style="transform: rotate(120deg);"></div>
+            <div class="deepak-lamp__ray" style="transform: rotate(150deg);"></div>
+            <div class="deepak-lamp__ray" style="transform: rotate(180deg);"></div>
+            <div class="deepak-lamp__ray" style="transform: rotate(210deg);"></div>
+            <div class="deepak-lamp__ray" style="transform: rotate(240deg);"></div>
+            <div class="deepak-lamp__ray" style="transform: rotate(270deg);"></div>
+            <div class="deepak-lamp__ray" style="transform: rotate(300deg);"></div>
+            <div class="deepak-lamp__ray" style="transform: rotate(330deg);"></div>
+          </div>
+
+          <!-- SVG Flame -->
+          <div class="deepak-lamp__flame-wrap">
+            <svg class="deepak-lamp__flame-svg" viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="flameGrad1" cx="50%" cy="70%" r="50%">
+                  <stop offset="0%" stop-color="#FFFACD"/>
+                  <stop offset="30%" stop-color="#FFD700"/>
+                  <stop offset="60%" stop-color="#FFA500"/>
+                  <stop offset="85%" stop-color="#FF6B00"/>
+                  <stop offset="100%" stop-color="#FF4500" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="flameGrad2" cx="50%" cy="65%" r="40%">
+                  <stop offset="0%" stop-color="#FFFFFF"/>
+                  <stop offset="40%" stop-color="#FFF8DC"/>
+                  <stop offset="70%" stop-color="#FFD700" stop-opacity="0.8"/>
+                  <stop offset="100%" stop-color="#FFA500" stop-opacity="0"/>
+                </radialGradient>
+                <filter id="flameBlur">
+                  <feGaussianBlur stdDeviation="1.5"/>
+                </filter>
+              </defs>
+              <!-- Outer flame -->
+              <path class="flame-main" d="M30 5 C35 25, 50 40, 48 60 C46 75, 40 88, 30 95 C20 88, 14 75, 12 60 C10 40, 25 25, 30 5Z" fill="url(#flameGrad1)" filter="url(#flameBlur)"/>
+              <!-- Inner flame -->
+              <path class="flame-highlight" d="M30 20 C33 32, 42 45, 40 60 C39 72, 35 82, 30 88 C25 82, 21 72, 20 60 C18 45, 27 32, 30 20Z" fill="url(#flameGrad2)"/>
+              <!-- Bright core -->
+              <ellipse cx="30" cy="70" rx="5" ry="12" fill="white" opacity="0.6" filter="url(#flameBlur)"/>
+            </svg>
+          </div>
+
+          <!-- Lamp body -->
+          <div class="deepak-lamp__body">
+            <div class="deepak-lamp__oil-bowl">
+              <div class="deepak-lamp__wick"></div>
+              <div class="deepak-lamp__spout"></div>
+            </div>
+            <div class="deepak-lamp__stem"></div>
+            <div class="deepak-lamp__base"></div>
+            <div class="deepak-lamp__base-plate"></div>
+          </div>
         </div>
 
         <div class="deepak__counter" id="deepak-counter">
           <!-- Digits injected by deepak.js -->
         </div>
 
-        <p class="deepak__label">Virtual deepaks lit in tribute to Lok Mata Ahilya Bai Holkar</p>
+        <p class="deepak__label" data-i18n="deepak.label">Virtual deepaks lit in tribute to Lok Mata Ahilya Bai Holkar</p>
 
         <div class="deepak__light-btn">
-          <button class="btn btn--gold btn--lg" id="light-deepak-btn">
+          <button class="btn btn--gold btn--lg" id="light-deepak-btn" data-i18n="deepak.lightBtn" data-i18n-html="1">
             🪔 Light a Deepak
           </button>
           <div class="deepak__flash" id="deepak-flash"></div>
@@ -683,13 +796,13 @@
   <footer class="footer">
     <div class="footer__inner">
       <div class="footer__ornament">✦ ✦ ✦</div>
-      <p style="color: var(--gold-light); font-family: var(--font-heading); font-size: var(--text-lg); margin-bottom: var(--space-md);">
+      <p style="color: var(--gold-light); font-family: var(--font-heading); font-size: var(--text-lg); margin-bottom: var(--space-md);" data-i18n="footer.made">
         Made with reverence for Lok Mata Devi Ahilya Bai Holkar
       </p>
       <p class="text-devanagari" style="color: var(--gold-dark); margin-bottom: var(--space-lg);">
         ॥ जय अहिल्या माता ॥
       </p>
-      <p>
+      <p data-i18n="footer.reign">
         Her reign (1767–1795) transformed India through temples, ghats, dharamshalas, and wells
         spanning from Gangotri to Rameswaram, Dwarka to Jagannath Puri.
       </p>
@@ -727,7 +840,9 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <script src="js/utils.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/navigation.js"></script>
+  <script src="js/quotes.js"></script>
   <script src="js/court.js"></script>
   <script src="js/map-data.js"></script>
   <script src="js/map.js"></script>

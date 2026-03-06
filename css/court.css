@@ -87,10 +87,17 @@
   margin-bottom: var(--space-md);
 }
 
+.court-card__buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .court-card__speak-btn {
   background: linear-gradient(135deg, var(--gold), var(--gold-dark));
   color: var(--charcoal);
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 1.2rem;
   border-radius: var(--radius-full);
   font-weight: 600;
   font-size: var(--text-sm);
@@ -100,6 +107,32 @@
 .court-card__speak-btn:hover {
   box-shadow: var(--shadow-glow-gold);
   transform: scale(1.05);
+}
+
+.court-card__listen-btn {
+  background: linear-gradient(135deg, var(--maroon), var(--maroon-deep));
+  color: var(--gold-light);
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  transition: all var(--transition-fast);
+  border: 1px solid var(--gold-dark);
+}
+
+.court-card__listen-btn:hover {
+  box-shadow: 0 0 15px rgba(197, 163, 85, 0.3);
+  transform: scale(1.05);
+}
+
+.court-card__listen-btn--speaking {
+  animation: speakingPulse 1s ease-in-out infinite;
+  border-color: var(--saffron);
+}
+
+@keyframes speakingPulse {
+  0%, 100% { box-shadow: 0 0 5px rgba(212, 114, 42, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(212, 114, 42, 0.6); }
 }
 
 /* Speech bubble */

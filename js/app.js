@@ -3,10 +3,14 @@
    ============================================ */
 
 (function () {
+  // Initialize i18n first
+  initI18n();
+
   // Section lazy initialization using IntersectionObserver
   var initialized = {};
 
   var sectionInitMap = {
+    'quotes': initQuotes,
     'court': initCourt,
     'sacred-map': initMap,
     'studio': initStudio,

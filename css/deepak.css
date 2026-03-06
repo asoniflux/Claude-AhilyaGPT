@@ -1,11 +1,27 @@
 /* ============================================
-   Deepak Counter
+   Deepak Counter — Premium Lamp Design
    ============================================ */
 
 .deepak-section {
-  background: linear-gradient(180deg, var(--charcoal) 0%, #1a1410 50%, var(--charcoal) 100%);
+  background: linear-gradient(180deg, var(--charcoal) 0%, #0d0806 50%, var(--charcoal) 100%);
   text-align: center;
   color: var(--text-on-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient background glow */
+.deepak-section::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255, 140, 0, 0.08) 0%, transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
 }
 
 .deepak-section .section-title::after {
@@ -16,32 +32,199 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-lg);
+  gap: var(--space-xl);
 }
 
-/* SVG flame */
-.deepak__flame-container {
+/* ─── PREMIUM DEEPAK LAMP (SVG + CSS) ─── */
+.deepak-lamp {
   position: relative;
-  width: 120px;
-  height: 160px;
+  width: 200px;
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
 }
 
-.deepak__flame {
-  width: 100%;
-  height: 100%;
-}
-
-.deepak__flame-glow {
+.deepak-lamp__glow {
   position: absolute;
-  top: 10%;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(circle, rgba(255, 160, 50, 0.4) 0%, transparent 70%);
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
-  animation: flicker 2s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(255, 180, 0, 0.35) 0%, rgba(255, 120, 0, 0.15) 30%, transparent 65%);
+  animation: deepakGlowPulse 2s ease-in-out infinite;
   pointer-events: none;
+}
+
+@keyframes deepakGlowPulse {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.7; }
+  50% { transform: translateX(-50%) scale(1.15); opacity: 1; }
+}
+
+/* SVG Flame */
+.deepak-lamp__flame-wrap {
+  position: relative;
+  width: 60px;
+  height: 100px;
+  z-index: 2;
+}
+
+.deepak-lamp__flame-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 12px rgba(255, 140, 0, 0.6));
+}
+
+.deepak-lamp__flame-svg .flame-main {
+  animation: flameDance 0.6s ease-in-out infinite alternate;
+  transform-origin: 30px 90px;
+}
+
+.deepak-lamp__flame-svg .flame-highlight {
+  animation: flameDance2 0.4s ease-in-out infinite alternate;
+  transform-origin: 30px 85px;
+}
+
+@keyframes flameDance {
+  0% { transform: scaleX(1) scaleY(1) rotate(-1.5deg); }
+  50% { transform: scaleX(0.92) scaleY(1.06) rotate(1deg); }
+  100% { transform: scaleX(1.04) scaleY(0.96) rotate(-0.5deg); }
+}
+
+@keyframes flameDance2 {
+  0% { transform: scaleX(1) scaleY(1) rotate(1deg); }
+  100% { transform: scaleX(0.9) scaleY(1.08) rotate(-1deg); }
+}
+
+/* CSS Lamp body */
+.deepak-lamp__body {
+  position: relative;
+  z-index: 1;
+  margin-top: -12px;
+}
+
+.deepak-lamp__oil-bowl {
+  width: 120px;
+  height: 40px;
+  background: linear-gradient(180deg, #D4A14A 0%, #C5A355 20%, #A8882E 50%, #8B6D20 80%, #6B5418 100%);
+  border-radius: 50%;
+  position: relative;
+  box-shadow:
+    0 4px 12px rgba(139, 115, 50, 0.5),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(245, 200, 66, 0.4);
+}
+
+/* Oil surface shimmer */
+.deepak-lamp__oil-bowl::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 12px;
+  right: 12px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 180, 50, 0.4), rgba(200, 140, 30, 0.2), rgba(255, 200, 80, 0.3));
+  animation: oilShimmer 3s ease-in-out infinite;
+}
+
+@keyframes oilShimmer {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Wick */
+.deepak-lamp__wick {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 14px;
+  background: linear-gradient(180deg, #2A1800, #5A3A10);
+  border-radius: 2px 2px 0 0;
+}
+
+/* Spout */
+.deepak-lamp__spout {
+  position: absolute;
+  top: 8px;
+  right: -14px;
+  width: 24px;
+  height: 12px;
+  background: linear-gradient(180deg, #C5A355, #8B6D20);
+  border-radius: 0 60% 60% 0 / 0 50% 50% 0;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Stem */
+.deepak-lamp__stem {
+  width: 16px;
+  height: 50px;
+  background: linear-gradient(180deg, #A8882E 0%, #8B7332 50%, #6B5418 100%);
+  margin: 0 auto;
+  position: relative;
+  box-shadow: inset 2px 0 4px rgba(245, 200, 66, 0.2), inset -2px 0 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Decorative ring on stem */
+.deepak-lamp__stem::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -4px;
+  right: -4px;
+  height: 6px;
+  background: linear-gradient(180deg, #F5C842, #C5A355, #8B7332);
+  border-radius: 3px;
+  transform: translateY(-50%);
+}
+
+/* Base */
+.deepak-lamp__base {
+  width: 100px;
+  height: 20px;
+  background: linear-gradient(180deg, #C5A355 0%, #A8882E 40%, #8B6D20 100%);
+  border-radius: 50%;
+  margin-top: -2px;
+  box-shadow:
+    0 6px 16px rgba(107, 84, 24, 0.6),
+    inset 0 2px 4px rgba(245, 200, 66, 0.3);
+}
+
+/* Decorative base plate */
+.deepak-lamp__base-plate {
+  width: 130px;
+  height: 14px;
+  background: linear-gradient(180deg, #8B7332, #6B5418, #4A3A10);
+  border-radius: 50%;
+  margin-top: -3px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Light rays emanating from flame */
+.deepak-lamp__rays {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.deepak-lamp__ray {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(255, 200, 50, 0.8), transparent);
+  transform-origin: top center;
 }
 
 /* Counter display */
@@ -53,29 +236,30 @@
 
 .deepak__digit-wrapper {
   overflow: hidden;
-  height: 64px;
+  height: 72px;
 }
 
 .deepak__digit {
-  font-family: var(--font-heading);
-  font-size: 3rem;
+  font-family: 'Cinzel Decorative', var(--font-heading);
+  font-size: 3.5rem;
   font-weight: 700;
   color: var(--gold);
-  line-height: 64px;
+  line-height: 72px;
   display: block;
   transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 0 20px rgba(197, 163, 85, 0.4);
 }
 
 .deepak__comma {
-  font-family: var(--font-heading);
-  font-size: 3rem;
+  font-family: 'Cinzel Decorative', var(--font-heading);
+  font-size: 3.5rem;
   font-weight: 700;
   color: var(--gold-dark);
-  line-height: 64px;
+  line-height: 72px;
 }
 
 .deepak__plus {
-  font-family: var(--font-heading);
+  font-family: 'Cinzel Decorative', var(--font-heading);
   font-size: 2rem;
   color: var(--gold-dark);
   margin-left: var(--space-xs);
@@ -95,6 +279,8 @@
 .deepak__light-btn .btn {
   position: relative;
   z-index: 1;
+  font-size: var(--text-lg);
+  padding: 1rem 2.5rem;
 }
 
 /* Flash effect on click */
@@ -103,8 +289,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   background: radial-gradient(circle, var(--gold-glow), transparent);
   opacity: 0;
@@ -192,5 +378,35 @@
     right: var(--space-md);
     width: 40px;
     height: 40px;
+  }
+
+  .deepak-lamp {
+    width: 150px;
+    height: 220px;
+  }
+
+  .deepak-lamp__oil-bowl {
+    width: 90px;
+    height: 32px;
+  }
+
+  .deepak-lamp__stem {
+    width: 12px;
+    height: 36px;
+  }
+
+  .deepak-lamp__base {
+    width: 80px;
+    height: 16px;
+  }
+
+  .deepak-lamp__base-plate {
+    width: 100px;
+    height: 12px;
+  }
+
+  .deepak-lamp__flame-wrap {
+    width: 44px;
+    height: 76px;
   }
 }
