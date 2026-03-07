@@ -1,12 +1,11 @@
 /* ============================================
-   Collector Badges
+   Collector Badges — Clean Panel
    ============================================ */
 
-/* Badge panel overlay */
 .badge-panel-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
   z-index: var(--z-modal);
   opacity: 0;
   visibility: hidden;
@@ -18,20 +17,20 @@
   visibility: visible;
 }
 
-/* Slide-in panel */
 .badge-panel {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
-  width: 380px;
+  width: 340px;
   max-width: 90vw;
-  background: linear-gradient(180deg, var(--maroon-deep), #3A0B15);
+  background: var(--charcoal);
+  border-left: 1px solid rgba(197, 163, 85, 0.1);
   z-index: var(--z-modal);
   transform: translateX(100%);
   transition: transform var(--transition-normal);
   overflow-y: auto;
-  padding: var(--space-xl);
+  padding: var(--space-xl) var(--space-lg);
 }
 
 .badge-panel--open {
@@ -47,13 +46,13 @@
 
 .badge-panel__title {
   font-family: var(--font-heading);
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
   color: var(--gold);
 }
 
 .badge-panel__close {
-  color: var(--gold-light);
-  font-size: 1.5rem;
+  color: rgba(232, 213, 163, 0.4);
+  font-size: 1.3rem;
   padding: var(--space-xs);
   transition: color var(--transition-fast);
 }
@@ -66,19 +65,18 @@
   text-align: center;
   margin-bottom: var(--space-xl);
   padding-bottom: var(--space-lg);
-  border-bottom: 1px solid rgba(197, 163, 85, 0.2);
+  border-bottom: 1px solid rgba(197, 163, 85, 0.08);
 }
 
 .badge-panel__progress-text {
-  font-size: var(--text-sm);
-  color: var(--gold-light);
-  opacity: 0.7;
+  font-size: var(--text-xs);
+  color: rgba(232, 213, 163, 0.5);
 }
 
 .badge-panel__progress-bar {
-  margin-top: var(--space-sm);
-  height: 6px;
-  background: rgba(197, 163, 85, 0.2);
+  margin-top: var(--space-xs);
+  height: 4px;
+  background: rgba(197, 163, 85, 0.1);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -90,65 +88,64 @@
   transition: width var(--transition-slow);
 }
 
-/* Badge list */
 .badge-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
+  gap: var(--space-md);
 }
 
 .badge-item {
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  padding: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(197, 163, 85, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(197, 163, 85, 0.06);
   transition: all var(--transition-normal);
 }
 
 .badge-item--unlocked {
-  background: rgba(197, 163, 85, 0.08);
-  border-color: var(--gold-dark);
+  background: rgba(197, 163, 85, 0.05);
+  border-color: rgba(197, 163, 85, 0.15);
 }
 
 .badge-item__icon {
-  width: 56px;
-  height: 56px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   flex-shrink: 0;
   position: relative;
 }
 
 .badge-item__icon--locked {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.2);
 }
 
 .badge-item__icon--unlocked {
   background: linear-gradient(135deg, var(--gold), var(--gold-dark));
   color: var(--charcoal);
-  box-shadow: 0 0 20px var(--gold-glow);
+  box-shadow: 0 0 12px var(--gold-glow);
 }
 
 .badge-item__lock {
   position: absolute;
   bottom: -2px;
   right: -2px;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--charcoal);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.6rem;
-  color: #888;
+  font-size: 0.55rem;
+  color: #666;
 }
 
 .badge-item__info {
@@ -157,25 +154,25 @@
 
 .badge-item__name {
   font-family: var(--font-heading);
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--gold-light);
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .badge-item--locked .badge-item__name {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .badge-item__desc {
   font-size: var(--text-xs);
-  color: rgba(255, 255, 255, 0.4);
-  margin-bottom: 4px;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 3px;
 }
 
 .badge-item__progress-bar {
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  height: 3px;
+  background: rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -189,5 +186,5 @@
 
 .badge-item__check {
   color: var(--gold);
-  font-size: 1.2rem;
+  font-size: 1rem;
 }

@@ -1,22 +1,22 @@
 /* ============================================
-   AhilyaGPT - Court Personas
+   AhilyaGPT — Court Personas — Clean Layout
    ============================================ */
 
 .court {
-  background: linear-gradient(180deg, var(--parchment) 0%, var(--ivory) 100%);
+  background: var(--parchment);
 }
 
 .court__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-lg);
+  gap: var(--space-md);
 }
 
 .court-card {
   background: white;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--gold-light);
-  padding: var(--space-lg);
+  border: 1px solid rgba(197, 163, 85, 0.12);
+  padding: var(--space-lg) var(--space-md);
   text-align: center;
   position: relative;
   transition: all var(--transition-normal);
@@ -24,9 +24,9 @@
 }
 
 .court-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-elevated);
-  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+  border-color: rgba(197, 163, 85, 0.3);
 }
 
 .court-card--active {
@@ -36,38 +36,37 @@
 }
 
 .court-card--dimmed {
-  opacity: 0.5;
+  opacity: 0.4;
   transform: scale(0.98);
 }
 
-/* Avatar circle with initials */
+/* Avatar */
 .court-card__avatar {
-  width: 80px;
-  height: 80px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  margin: 0 auto var(--space-md);
+  margin: 0 auto var(--space-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-heading);
-  font-size: var(--text-xl);
+  font-size: var(--text-base);
   font-weight: 700;
   color: white;
   position: relative;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .court-card__avatar::after {
   content: '';
   position: absolute;
-  inset: -3px;
+  inset: -2px;
   border-radius: 50%;
-  border: 2px solid var(--gold-light);
+  border: 1.5px solid rgba(197, 163, 85, 0.3);
 }
 
 .court-card__name {
   font-family: var(--font-heading);
-  font-size: var(--text-lg);
+  font-size: var(--text-sm);
   font-weight: 700;
   color: var(--charcoal);
   margin-bottom: 2px;
@@ -77,19 +76,21 @@
   font-size: var(--text-xs);
   color: var(--text-muted);
   font-style: italic;
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-2xs);
 }
 
 .court-card__era {
   font-size: var(--text-xs);
   color: var(--gold-dark);
   font-weight: 600;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
+  opacity: 0.7;
 }
 
+/* Buttons */
 .court-card__buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-2xs);
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -97,82 +98,83 @@
 .court-card__speak-btn {
   background: linear-gradient(135deg, var(--gold), var(--gold-dark));
   color: var(--charcoal);
-  padding: 0.5rem 1.2rem;
+  padding: 0.35rem 0.85rem;
   border-radius: var(--radius-full);
   font-weight: 600;
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   transition: all var(--transition-fast);
 }
 
 .court-card__speak-btn:hover {
   box-shadow: var(--shadow-glow-gold);
-  transform: scale(1.05);
 }
 
 .court-card__listen-btn {
-  background: linear-gradient(135deg, var(--maroon), var(--maroon-deep));
-  color: var(--gold-light);
-  padding: 0.5rem 1.2rem;
+  background: transparent;
+  color: var(--gold-dark);
+  padding: 0.35rem 0.85rem;
   border-radius: var(--radius-full);
   font-weight: 600;
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   transition: all var(--transition-fast);
-  border: 1px solid var(--gold-dark);
+  border: 1.5px solid rgba(197, 163, 85, 0.3);
 }
 
 .court-card__listen-btn:hover {
-  box-shadow: 0 0 15px rgba(197, 163, 85, 0.3);
-  transform: scale(1.05);
+  border-color: var(--gold);
+  background: rgba(197, 163, 85, 0.05);
 }
 
 .court-card__listen-btn--speaking {
-  animation: speakingPulse 1s ease-in-out infinite;
+  animation: speakingPulse 1.2s ease-in-out infinite;
   border-color: var(--saffron);
+  color: var(--saffron);
 }
 
 @keyframes speakingPulse {
-  0%, 100% { box-shadow: 0 0 5px rgba(212, 114, 42, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(212, 114, 42, 0.6); }
+  0%, 100% { box-shadow: 0 0 4px rgba(212, 114, 42, 0.2); }
+  50% { box-shadow: 0 0 12px rgba(212, 114, 42, 0.4); }
 }
 
 /* Speech bubble */
 .court-card__speech {
   display: none;
-  margin-top: var(--space-md);
+  margin-top: var(--space-sm);
   padding: var(--space-md);
-  background: linear-gradient(135deg, var(--maroon-deep), var(--maroon));
-  color: var(--gold-light);
+  background: var(--charcoal);
+  color: var(--text-on-dark);
   border-radius: var(--radius-md);
   text-align: left;
   position: relative;
-  font-size: var(--text-sm);
-  line-height: 1.6;
-  animation: scaleIn 300ms ease-out;
+  font-size: var(--text-xs);
+  line-height: 1.7;
+  animation: scaleIn 200ms ease-out;
 }
 
 .court-card__speech--visible {
   display: block;
 }
 
-/* Triangle pointer */
 .court-card__speech::before {
   content: '';
   position: absolute;
-  top: -8px;
+  top: -6px;
   left: 50%;
   transform: translateX(-50%);
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 8px solid var(--maroon-deep);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid var(--charcoal);
 }
 
 .court-card__speech-text {
-  min-height: 60px;
+  min-height: 40px;
+  font-family: var(--font-serif);
+  font-style: italic;
 }
 
 .court-card__speech-cursor {
   display: inline-block;
-  width: 2px;
+  width: 1.5px;
   height: 1em;
   background: var(--gold);
   margin-left: 2px;
@@ -182,28 +184,27 @@
 
 .court-card__speech-source {
   display: block;
-  margin-top: var(--space-sm);
+  margin-top: var(--space-xs);
   font-size: var(--text-xs);
-  color: rgba(232, 213, 163, 0.5);
+  color: var(--gold-dark);
   font-style: italic;
+  opacity: 0.6;
 }
 
 .court-card__progress {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-xs);
-  margin-top: var(--space-sm);
-  font-size: var(--text-xs);
-  color: var(--text-muted);
+  gap: var(--space-2xs);
+  margin-top: var(--space-xs);
 }
 
 .court-card__progress-dot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--gold-light);
-  opacity: 0.3;
+  opacity: 0.2;
 }
 
 .court-card__progress-dot--active {
@@ -220,7 +221,7 @@
 @media (max-width: 768px) {
   .court__grid {
     grid-template-columns: 1fr;
-    max-width: 400px;
+    max-width: 380px;
     margin: 0 auto;
   }
 }

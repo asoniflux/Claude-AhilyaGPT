@@ -1,85 +1,86 @@
 /* ============================================
    Lok Mata Devi Ahilya Bai Holkar - Theme
-   Heritage Design System
+   Heritage Design System — Refined
    ============================================ */
 
 :root {
-  /* Primary palette - Maratha heritage */
+  /* ─── Core Palette — warm gold heritage ─── */
   --gold: #C5A355;
   --gold-light: #E8D5A3;
   --gold-dark: #8B7332;
-  --gold-glow: rgba(197, 163, 85, 0.4);
+  --gold-glow: rgba(197, 163, 85, 0.35);
+
   --maroon: #6B1D2A;
   --maroon-deep: #4A0E1C;
-  --maroon-light: #8B2E3D;
+
   --saffron: #D4722A;
   --saffron-light: #F0A050;
-  --ivory: #FDF6E3;
-  --ivory-warm: #F5ECD7;
-  --charcoal: #2C2420;
-  --parchment: #F9F1E4;
-  --teal: #2A8B8B;
-  --teal-light: #3AABAB;
-  --green: #4A7B3A;
-  --green-light: #6AAB5A;
-  --cyan: #5A9BBA;
-  --cyan-light: #7ABBDA;
 
-  /* Functional */
+  --ivory: #FDF6E3;
+  --parchment: #F5ECD7;
+  --charcoal: #1E1A17;
+  --charcoal-warm: #2C2420;
+
+  /* ─── Functional colors ─── */
   --text-primary: #2C2420;
   --text-secondary: #5C4B3A;
   --text-muted: #8B7B6A;
-  --text-on-dark: #FDF6E3;
+  --text-on-dark: rgba(253, 246, 227, 0.92);
   --text-on-maroon: #F5ECD7;
-  --border-ornate: var(--gold);
-  --bg-overlay: rgba(74, 14, 28, 0.85);
-  --bg-glass: rgba(253, 246, 227, 0.92);
 
-  /* Typography */
-  --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --font-body: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  /* Map accent colors */
+  --teal: #2A8B8B;
+  --green: #4A7B3A;
+  --cyan: #5A9BBA;
+
+  /* ─── Typography — consolidated ─── */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
   --font-accent: 'Noto Serif Devanagari', serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-display: 'Cinzel Decorative', var(--font-heading);
 
-  /* Font sizes - fluid */
-  --text-xs: clamp(0.7rem, 1.2vw, 0.8rem);
-  --text-sm: clamp(0.8rem, 1.5vw, 0.9rem);
-  --text-base: clamp(0.95rem, 2vw, 1.1rem);
-  --text-lg: clamp(1.1rem, 2.5vw, 1.35rem);
-  --text-xl: clamp(1.3rem, 3vw, 1.75rem);
-  --text-2xl: clamp(1.6rem, 4vw, 2.5rem);
-  --text-3xl: clamp(2rem, 5vw, 3.5rem);
-  --text-4xl: clamp(2.5rem, 7vw, 5rem);
+  /* ─── Type Scale — cleaner fluid sizes ─── */
+  --text-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.8rem);
+  --text-sm: clamp(0.82rem, 0.78rem + 0.2vw, 0.92rem);
+  --text-base: clamp(0.95rem, 0.9rem + 0.25vw, 1.1rem);
+  --text-lg: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
+  --text-xl: clamp(1.3rem, 1.1rem + 1vw, 1.75rem);
+  --text-2xl: clamp(1.6rem, 1.3rem + 1.5vw, 2.5rem);
+  --text-3xl: clamp(2rem, 1.5rem + 2.5vw, 3.2rem);
+  --text-4xl: clamp(2.5rem, 1.8rem + 3.5vw, 4.5rem);
 
-  /* Spacing scale (8px base) */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 2rem;
-  --space-xl: 4rem;
-  --space-2xl: 6rem;
-  --space-3xl: 8rem;
+  /* ─── Spacing — 4px base, more breathing room ─── */
+  --space-2xs: 0.25rem;  /* 4px */
+  --space-xs: 0.5rem;    /* 8px */
+  --space-sm: 0.75rem;   /* 12px */
+  --space-md: 1rem;      /* 16px */
+  --space-lg: 1.5rem;    /* 24px */
+  --space-xl: 2.5rem;    /* 40px */
+  --space-2xl: 4rem;     /* 64px */
+  --space-3xl: 6rem;     /* 96px */
+  --space-4xl: 8rem;     /* 128px */
 
-  /* Border radius */
+  /* ─── Border Radius ─── */
   --radius-sm: 4px;
   --radius-md: 8px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(107, 29, 42, 0.08);
-  --shadow-card: 0 4px 24px rgba(107, 29, 42, 0.12);
-  --shadow-elevated: 0 12px 48px rgba(44, 36, 32, 0.18);
-  --shadow-glow-gold: 0 0 30px rgba(197, 163, 85, 0.3);
-  --shadow-glow-flame: 0 0 20px rgba(255, 160, 50, 0.5);
+  /* ─── Shadows — subtle, layered ─── */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --shadow-glow-gold: 0 0 24px rgba(197, 163, 85, 0.25);
+  --shadow-glow-flame: 0 0 16px rgba(255, 160, 50, 0.4);
 
-  /* Transitions */
-  --transition-fast: 200ms ease;
-  --transition-normal: 400ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 800ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* ─── Transitions ─── */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 600ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Z-index layers */
+  /* ─── Z-index ─── */
   --z-base: 1;
   --z-sticky: 100;
   --z-overlay: 200;
@@ -87,7 +88,17 @@
   --z-toast: 400;
   --z-top: 500;
 
-  /* Layout */
-  --max-width: 1200px;
-  --nav-height: 70px;
+  /* ─── Layout ─── */
+  --max-width: 1120px;
+  --max-width-narrow: 760px;
+  --nav-height: 64px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

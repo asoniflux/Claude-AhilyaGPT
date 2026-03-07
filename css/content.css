@@ -1,128 +1,122 @@
 /* ============================================
-   Content Sections — Intro Quote, Biography,
-   Contributions, Timeline, Tribute
+   Content Sections — Intro, Bio, Contributions,
+   Timeline, Tribute — Clean & Breathable
    ============================================ */
 
-/* ─── SECTION LABEL (from reference) ─── */
+/* ─── Section Label ─── */
 .section-label {
-  font-family: 'Cinzel Decorative', var(--font-heading);
-  font-size: 0.65rem;
+  font-family: var(--font-display);
+  font-size: 0.6rem;
   color: var(--saffron);
-  letter-spacing: 0.5em;
+  letter-spacing: 0.4em;
   text-transform: uppercase;
   display: block;
-  margin-bottom: 0.8rem;
+  margin-bottom: var(--space-sm);
 }
 
-/* ─── DIVIDER ORNAMENT ─── */
+/* ─── Divider Ornament ─── */
 .divider-ornament {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin: 2rem auto;
-  max-width: 400px;
+  gap: var(--space-md);
+  margin: var(--space-xl) auto;
+  max-width: 300px;
 }
 
 .divider-ornament > span:first-child,
 .divider-ornament > span:last-child {
   flex: 1;
   height: 1px;
-  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  background: linear-gradient(to right, transparent, rgba(197, 163, 85, 0.4), transparent);
 }
 
 .divider-icon {
-  color: var(--gold);
-  font-size: 1.2rem;
+  color: var(--gold-dark);
+  font-size: 1rem;
+  opacity: 0.7;
 }
 
-/* ─── INTRO QUOTE SECTION ─── */
+/* ─── INTRO QUOTE ─── */
 .intro-quote-section {
   text-align: center;
+  padding: var(--space-3xl) 0;
 }
 
 .intro-bg {
-  padding: 4rem 2rem;
-  background: radial-gradient(ellipse at center, rgba(26, 16, 8, 0.8) 0%, transparent 70%);
-}
-
-.intro-quote-section .section-title::after {
-  display: none;
+  padding: var(--space-2xl) var(--space-lg);
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
 }
 
 blockquote.hero-quote {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-family: var(--font-serif);
+  font-size: clamp(1.15rem, 2.5vw, 1.7rem);
   font-style: italic;
   color: var(--text-on-dark);
-  line-height: 1.8;
-  max-width: 900px;
+  line-height: 1.9;
+  max-width: 800px;
   margin: 0 auto;
   position: relative;
-  padding: 2rem 3rem;
-}
-
-blockquote.hero-quote::before,
-blockquote.hero-quote::after {
-  font-size: 4rem;
-  color: rgba(212, 137, 26, 0.2);
-  position: absolute;
-  font-style: normal;
-  line-height: 1;
+  padding: var(--space-xl) var(--space-lg);
 }
 
 blockquote.hero-quote::before {
   content: '\201C';
+  font-size: 3.5rem;
+  color: rgba(197, 163, 85, 0.15);
+  position: absolute;
   top: 0;
   left: 0;
-}
-
-blockquote.hero-quote::after {
-  content: '\201D';
-  bottom: 0;
-  right: 0;
+  font-style: normal;
+  line-height: 1;
 }
 
 .quote-attribution {
-  margin-top: 1.5rem;
-  color: #C8A96E;
-  font-size: 0.9rem;
-  letter-spacing: 0.15em;
+  margin-top: var(--space-lg);
+  color: var(--gold-dark);
+  font-size: var(--text-sm);
+  letter-spacing: 0.1em;
 }
 
 /* ─── BIOGRAPHY ─── */
 .biography-section {
-  background: linear-gradient(135deg, rgba(26, 16, 8, 0.5) 0%, rgba(12, 8, 4, 0.3) 100%);
-  border-left: 4px solid;
-  border-image: linear-gradient(to bottom, var(--saffron), var(--gold), var(--maroon)) 1;
+  background: var(--parchment);
 }
 
 .bio-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  grid-template-columns: 1.3fr 1fr;
+  gap: var(--space-2xl);
   align-items: start;
 }
 
 .bio-text p {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
   line-height: 2;
   color: var(--text-secondary);
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-lg);
+}
+
+.bio-text p:last-child {
+  margin-bottom: 0;
 }
 
 .bio-facts {
-  background: rgba(197, 163, 85, 0.05);
-  border: 1px solid rgba(197, 163, 85, 0.2);
-  padding: 2rem;
-  border-radius: 2px;
+  background: white;
+  border: 1px solid rgba(197, 163, 85, 0.15);
+  padding: var(--space-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: calc(var(--nav-height) + var(--space-lg));
 }
 
 .fact-item {
   display: flex;
-  gap: 1rem;
-  padding: 0.8rem 0;
-  border-bottom: 1px solid rgba(197, 163, 85, 0.1);
+  gap: var(--space-md);
+  padding: 0.65rem 0;
+  border-bottom: 1px solid rgba(197, 163, 85, 0.08);
 }
 
 .fact-item:last-child {
@@ -130,21 +124,21 @@ blockquote.hero-quote::after {
 }
 
 .fact-key {
-  font-family: 'Cinzel Decorative', var(--font-heading);
-  font-size: 0.6rem;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
   color: var(--text-muted);
-  letter-spacing: 0.15em;
-  min-width: 100px;
-  padding-top: 0.1rem;
+  letter-spacing: 0.1em;
+  min-width: 80px;
   text-transform: uppercase;
+  font-weight: 600;
 }
 
 .fact-val {
-  font-size: 1rem;
+  font-size: var(--text-sm);
   color: var(--text-primary);
 }
 
-/* ─── CONTRIBUTIONS CARDS ─── */
+/* ─── CONTRIBUTIONS ─── */
 .contributions-section .section-title h2 {
   color: var(--text-on-dark);
 }
@@ -160,119 +154,99 @@ blockquote.hero-quote::after {
 .contrib-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 1rem;
+  gap: var(--space-lg);
 }
 
 .contrib-card {
-  background: linear-gradient(145deg, rgba(34, 20, 8, 0.8), rgba(20, 12, 4, 0.9));
-  border: 1px solid rgba(197, 163, 85, 0.15);
-  padding: 2.5rem 2rem;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(197, 163, 85, 0.1);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl) var(--space-lg);
+  transition: all var(--transition-normal);
   cursor: default;
 }
 
-.contrib-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: linear-gradient(to right, var(--saffron), var(--gold));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s ease;
-}
-
 .contrib-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(197, 163, 85, 0.4);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 30px rgba(212, 137, 26, 0.1);
-}
-
-.contrib-card:hover::before {
-  transform: scaleX(1);
+  background: rgba(197, 163, 85, 0.05);
+  border-color: rgba(197, 163, 85, 0.25);
+  transform: translateY(-2px);
 }
 
 .card-icon {
-  font-size: 2.5rem;
+  font-size: 2rem;
   display: block;
-  margin-bottom: 1.2rem;
-  filter: drop-shadow(0 0 10px rgba(212, 137, 26, 0.3));
+  margin-bottom: var(--space-md);
 }
 
 .card-title-text {
-  font-family: 'Cinzel Decorative', var(--font-heading);
-  font-size: 0.85rem;
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
   color: var(--gold);
-  letter-spacing: 0.1em;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: var(--space-sm);
+  font-weight: 700;
 }
 
 .card-text {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1rem;
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
   line-height: 1.8;
-  color: #C8A96E;
+  color: rgba(232, 213, 163, 0.7);
 }
 
 /* ─── TIMELINE ─── */
 .timeline-section {
-  background: linear-gradient(180deg, var(--parchment) 0%, var(--ivory) 100%);
+  background: var(--ivory);
 }
 
 .timeline-wrapper {
   position: relative;
-  padding-left: 3rem;
+  padding-left: var(--space-2xl);
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
 }
 
 .timeline-line {
   position: absolute;
-  left: 0;
+  left: 12px;
   top: 0;
   bottom: 0;
   width: 1px;
-  background: linear-gradient(to bottom, transparent, var(--gold) 10%, var(--gold) 90%, transparent);
+  background: linear-gradient(to bottom, transparent, var(--gold-light) 10%, var(--gold-light) 90%, transparent);
 }
 
 .timeline-events {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: var(--space-2xl);
 }
 
 .timeline-event {
   display: flex;
-  gap: 2rem;
+  gap: var(--space-lg);
   position: relative;
   align-items: flex-start;
 }
 
 .t-dot {
   flex-shrink: 0;
-  width: 14px;
-  height: 14px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--gold);
   border: 2px solid var(--gold-light);
-  margin-top: 0.3rem;
-  box-shadow: 0 0 15px rgba(197, 163, 85, 0.5);
   position: absolute;
-  left: -3rem;
-  transform: translateX(calc(-50% + 0.5px));
+  left: calc(var(--space-2xl) * -1 + 7px);
+  top: 4px;
 }
 
 .t-year {
-  font-family: 'Cinzel Decorative', var(--font-heading);
-  font-size: 0.75rem;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
   color: var(--saffron);
-  letter-spacing: 0.15em;
-  min-width: 60px;
-  margin-top: 0.1rem;
+  letter-spacing: 0.1em;
+  min-width: 48px;
+  font-weight: 700;
   flex-shrink: 0;
 }
 
@@ -281,40 +255,38 @@ blockquote.hero-quote::after {
 }
 
 .t-title {
-  font-family: 'Cinzel Decorative', var(--font-heading);
-  font-size: 0.9rem;
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
   color: var(--charcoal);
-  margin-bottom: 0.5rem;
-  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2xs);
+  font-weight: 700;
 }
 
 .t-desc {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1rem;
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
   color: var(--text-muted);
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
 /* ─── TRIBUTE ─── */
 .tribute-section {
   text-align: center;
-  padding: 8rem 2rem;
-  background: radial-gradient(ellipse at 50% 50%, rgba(50, 20, 0, 0.6) 0%, transparent 70%);
+  padding: var(--space-4xl) var(--space-lg);
 }
 
 .tribute-word {
-  font-family: 'Cinzel Decorative', var(--font-heading);
-  font-size: clamp(3rem, 10vw, 9rem);
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 7rem);
   font-weight: 900;
   display: block;
-  background: linear-gradient(135deg, var(--maroon), #9B2335, var(--gold), var(--saffron), #F5C842);
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--saffron-light), var(--gold));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1;
-  filter: drop-shadow(0 0 40px rgba(212, 137, 26, 0.3));
-  animation: tributeShimmer 4s ease infinite;
   background-size: 200% auto;
+  animation: tributeShimmer 6s ease infinite;
 }
 
 @keyframes tributeShimmer {
@@ -323,55 +295,54 @@ blockquote.hero-quote::after {
 }
 
 .tribute-sub {
-  font-size: clamp(1.2rem, 3vw, 2rem);
-  color: #FBE8A6;
-  margin-top: 1rem;
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  color: rgba(251, 232, 166, 0.7);
+  margin-top: var(--space-md);
   display: block;
 }
 
 .tribute-text {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(1rem, 2vw, 1.4rem);
-  color: #C8A96E;
-  max-width: 700px;
-  margin: 2rem auto;
-  line-height: 1.9;
+  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  color: rgba(200, 169, 110, 0.8);
+  max-width: 640px;
+  margin: var(--space-xl) auto;
+  line-height: 2;
 }
 
 .tribute-lamp-note {
-  font-size: 1rem;
+  font-size: var(--text-sm);
   color: var(--saffron);
-  letter-spacing: 0.2em;
-  margin-top: 2rem;
+  letter-spacing: 0.15em;
+  margin-top: var(--space-xl);
+  opacity: 0.8;
 }
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 768px) {
   .bio-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: var(--space-xl);
+  }
+
+  .bio-facts {
+    position: static;
   }
 
   .timeline-wrapper {
-    padding-left: 2rem;
+    padding-left: var(--space-xl);
   }
 
   .t-dot {
-    left: -2rem;
+    left: calc(var(--space-xl) * -1 + 7px);
   }
 
   blockquote.hero-quote {
-    padding: 1rem;
-    font-size: 1.1rem;
-  }
-
-  blockquote.hero-quote::before,
-  blockquote.hero-quote::after {
-    font-size: 2.5rem;
+    padding: var(--space-md);
   }
 
   .tribute-section {
-    padding: 4rem 1rem;
+    padding: var(--space-3xl) var(--space-md);
   }
 }

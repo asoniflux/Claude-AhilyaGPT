@@ -1,28 +1,19 @@
 /* ============================================
-   Historical Quotes Carousel
+   Historical Quotes Carousel — Clean
    ============================================ */
 
 .quotes-section {
-  background: linear-gradient(180deg, var(--charcoal) 0%, #1a0a04 50%, var(--charcoal) 100%);
+  background: var(--charcoal);
   color: var(--text-on-dark);
   text-align: center;
   position: relative;
-  overflow: hidden;
-}
-
-.quotes-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 50%, rgba(212, 137, 26, 0.08) 0%, transparent 60%);
-  pointer-events: none;
 }
 
 .quotes-carousel {
   position: relative;
-  max-width: 800px;
+  max-width: var(--max-width-narrow);
   margin: 0 auto;
-  min-height: 320px;
+  min-height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,9 +21,9 @@
 
 .quote-card {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  padding: 3rem 2rem;
+  transform: translateY(12px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  padding: var(--space-xl) var(--space-lg);
 }
 
 .quote-card--visible {
@@ -42,71 +33,73 @@
 
 .quote-type {
   display: inline-block;
-  font-family: 'Cinzel Decorative', var(--font-heading);
-  font-size: 0.6rem;
-  letter-spacing: 0.3em;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  padding: 0.4rem 1.2rem;
+  padding: 0.3rem 1rem;
   border-radius: var(--radius-full);
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-xl);
   border: 1px solid;
+  font-weight: 600;
 }
 
 .quote-type--ahilya {
-  color: #F5C842;
-  border-color: rgba(245, 200, 66, 0.4);
-  background: rgba(245, 200, 66, 0.08);
+  color: var(--gold);
+  border-color: rgba(197, 163, 85, 0.3);
+  background: rgba(197, 163, 85, 0.06);
 }
 
 .quote-type--historian {
   color: #87CEEB;
-  border-color: rgba(135, 206, 235, 0.4);
-  background: rgba(135, 206, 235, 0.08);
+  border-color: rgba(135, 206, 235, 0.3);
+  background: rgba(135, 206, 235, 0.06);
 }
 
 .quote-type--leader {
   color: #FF7B4A;
-  border-color: rgba(255, 123, 74, 0.4);
-  background: rgba(255, 123, 74, 0.08);
+  border-color: rgba(255, 123, 74, 0.3);
+  background: rgba(255, 123, 74, 0.06);
 }
 
 .quote-type--scholar {
   color: #B68AE8;
-  border-color: rgba(182, 138, 232, 0.4);
-  background: rgba(182, 138, 232, 0.08);
+  border-color: rgba(182, 138, 232, 0.3);
+  background: rgba(182, 138, 232, 0.06);
 }
 
 .quote-text {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.15rem, 2.5vw, 1.6rem);
+  font-family: var(--font-serif);
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
   font-style: italic;
-  line-height: 1.9;
-  color: var(--gold-light);
-  margin-bottom: 2rem;
+  line-height: 2;
+  color: rgba(232, 213, 163, 0.85);
+  margin-bottom: var(--space-xl);
   position: relative;
 }
 
 .quote-text::before {
   content: '\201C';
-  font-size: 5rem;
-  color: rgba(212, 137, 26, 0.15);
+  font-size: 4rem;
+  color: rgba(197, 163, 85, 0.1);
   position: absolute;
-  top: -2rem;
-  left: -1rem;
+  top: -1.5rem;
+  left: -0.5rem;
   line-height: 1;
   font-style: normal;
 }
 
 .quote-author {
-  font-family: 'Cinzel Decorative', var(--font-heading);
-  font-size: 0.85rem;
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
   color: var(--gold);
-  letter-spacing: 0.1em;
-  margin-bottom: 0.3rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2rem;
+  font-weight: 600;
 }
 
 .quote-context {
-  font-size: 0.8rem;
+  font-size: var(--text-xs);
   color: var(--text-muted);
   font-style: italic;
 }
@@ -116,18 +109,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
-  margin-top: 2rem;
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
 }
 
 .quote-nav-btn {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  border: 1px solid rgba(197, 163, 85, 0.3);
-  background: rgba(197, 163, 85, 0.05);
-  color: var(--gold);
-  font-size: 1.2rem;
+  border: 1px solid rgba(197, 163, 85, 0.2);
+  background: transparent;
+  color: var(--gold-dark);
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,90 +129,86 @@
 }
 
 .quote-nav-btn:hover {
-  background: rgba(197, 163, 85, 0.15);
+  background: rgba(197, 163, 85, 0.1);
   border-color: var(--gold);
+  color: var(--gold);
 }
 
 .quote-dots {
   display: flex;
-  gap: 0.5rem;
+  gap: 6px;
   align-items: center;
 }
 
 .quote-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: rgba(197, 163, 85, 0.2);
+  background: rgba(197, 163, 85, 0.15);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .quote-dot--active {
   background: var(--gold);
-  box-shadow: 0 0 10px rgba(197, 163, 85, 0.5);
   transform: scale(1.3);
 }
 
 .quote-dot:hover {
-  background: rgba(197, 163, 85, 0.5);
+  background: rgba(197, 163, 85, 0.4);
 }
 
-/* ─── LANGUAGE SWITCHER ─── */
+/* ─── Language Switcher ─── */
 .lang-switcher {
   position: fixed;
-  top: calc(var(--nav-height) + 12px);
-  right: 20px;
+  top: calc(var(--nav-height) + 10px);
+  right: 16px;
   z-index: var(--z-sticky);
   display: flex;
-  gap: 4px;
-  background: rgba(44, 36, 32, 0.9);
+  gap: 2px;
+  background: rgba(30, 26, 23, 0.85);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(197, 163, 85, 0.3);
+  border: 1px solid rgba(197, 163, 85, 0.15);
   border-radius: var(--radius-full);
-  padding: 3px;
+  padding: 2px;
 }
 
 .lang-btn {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  padding: 5px 12px;
+  padding: 4px 10px;
   border-radius: var(--radius-full);
-  color: var(--gold-light);
+  color: rgba(232, 213, 163, 0.5);
   cursor: pointer;
   transition: all var(--transition-fast);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   background: transparent;
   border: none;
   white-space: nowrap;
 }
 
 .lang-btn:hover {
-  background: rgba(197, 163, 85, 0.15);
+  color: var(--gold-light);
 }
 
 .lang-btn--active {
-  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  background: var(--gold);
   color: var(--charcoal);
 }
 
 @media (max-width: 768px) {
   .lang-switcher {
     top: auto;
-    bottom: 70px;
-    right: 12px;
+    bottom: 60px;
+    right: 10px;
   }
 
   .lang-btn {
-    font-size: 0.65rem;
-    padding: 4px 8px;
+    font-size: 0.6rem;
+    padding: 3px 7px;
   }
 
   .quote-card {
-    padding: 2rem 1rem;
-  }
-
-  .quote-nav {
-    gap: 1rem;
+    padding: var(--space-lg) var(--space-sm);
   }
 }

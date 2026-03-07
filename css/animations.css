@@ -1,142 +1,74 @@
 /* ============================================
-   Animations & Transitions
+   Animations — Refined, Less Visual Noise
    ============================================ */
 
-/* Fade in and slide up */
+/* ─── Core Keyframes ─── */
 @keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Fade in */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-/* Scale in */
 @keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-/* Float upward (for particles) */
 @keyframes floatUp {
-  0% {
-    opacity: 0;
-    transform: translateY(0) scale(0);
-  }
-  10% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  90% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-100vh) scale(0.5);
-  }
+  0% { opacity: 0; transform: translateY(0) scale(0); }
+  10% { opacity: 0.8; transform: scale(1); }
+  90% { opacity: 0.2; }
+  100% { opacity: 0; transform: translateY(-100vh) scale(0.5); }
 }
 
-/* Flame flicker */
-@keyframes flicker {
-  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
-  25% { transform: scale(1.05) rotate(-2deg); opacity: 0.9; }
-  50% { transform: scale(0.97) rotate(1deg); opacity: 1; }
-  75% { transform: scale(1.03) rotate(-1deg); opacity: 0.95; }
-}
-
-/* Shimmer effect for buttons */
 @keyframes shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 
-/* Pulse glow */
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 10px var(--gold-glow); }
-  50% { box-shadow: 0 0 30px var(--gold-glow), 0 0 60px rgba(197, 163, 85, 0.15); }
+  0%, 100% { box-shadow: 0 0 8px var(--gold-glow); }
+  50% { box-shadow: 0 0 20px var(--gold-glow); }
 }
 
-/* Typewriter cursor blink */
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
 
-/* Spin (for loading) */
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-/* Skeleton loading pulse */
-@keyframes skeletonPulse {
-  0%, 100% { background-color: rgba(197, 163, 85, 0.1); }
-  50% { background-color: rgba(197, 163, 85, 0.2); }
-}
-
-/* Gold sparkle burst */
 @keyframes sparkleBurst {
-  0% {
-    transform: scale(0);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.5);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(2);
-    opacity: 0;
-  }
+  0% { transform: scale(0); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.6; }
+  100% { transform: scale(2); opacity: 0; }
 }
 
-/* Toast slide in */
 @keyframes toastSlideIn {
-  from {
-    transform: translateY(-100px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(-60px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 @keyframes toastSlideOut {
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-100px);
-    opacity: 0;
-  }
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-60px); opacity: 0; }
 }
 
-/* Digit roll */
 @keyframes digitRoll {
   from { transform: translateY(-100%); }
   to { transform: translateY(0); }
 }
 
-/* Scroll-triggered reveal classes */
+/* ─── Scroll Reveal — smooth, subtle ─── */
 .reveal {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(20px);
   transition: opacity var(--transition-slow), transform var(--transition-slow);
 }
 
@@ -147,7 +79,7 @@
 
 .reveal--left {
   opacity: 0;
-  transform: translateX(-30px);
+  transform: translateX(-20px);
   transition: opacity var(--transition-slow), transform var(--transition-slow);
 }
 
@@ -158,7 +90,7 @@
 
 .reveal--right {
   opacity: 0;
-  transform: translateX(30px);
+  transform: translateX(20px);
   transition: opacity var(--transition-slow), transform var(--transition-slow);
 }
 
@@ -169,7 +101,7 @@
 
 .reveal--scale {
   opacity: 0;
-  transform: scale(0.9);
+  transform: scale(0.95);
   transition: opacity var(--transition-slow), transform var(--transition-slow);
 }
 
@@ -178,29 +110,32 @@
   transform: scale(1);
 }
 
-/* Stagger children */
+/* Stagger children — up to 10 */
 .reveal--stagger > * {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 500ms ease, transform 500ms ease;
+  transform: translateY(15px);
+  transition: opacity 400ms ease, transform 400ms ease;
 }
 
 .reveal--stagger.reveal--visible > *:nth-child(1) { transition-delay: 0ms; opacity: 1; transform: none; }
-.reveal--stagger.reveal--visible > *:nth-child(2) { transition-delay: 100ms; opacity: 1; transform: none; }
-.reveal--stagger.reveal--visible > *:nth-child(3) { transition-delay: 200ms; opacity: 1; transform: none; }
-.reveal--stagger.reveal--visible > *:nth-child(4) { transition-delay: 300ms; opacity: 1; transform: none; }
-.reveal--stagger.reveal--visible > *:nth-child(5) { transition-delay: 400ms; opacity: 1; transform: none; }
-.reveal--stagger.reveal--visible > *:nth-child(6) { transition-delay: 500ms; opacity: 1; transform: none; }
-.reveal--stagger.reveal--visible > *:nth-child(7) { transition-delay: 600ms; opacity: 1; transform: none; }
-.reveal--stagger.reveal--visible > *:nth-child(8) { transition-delay: 700ms; opacity: 1; transform: none; }
+.reveal--stagger.reveal--visible > *:nth-child(2) { transition-delay: 60ms; opacity: 1; transform: none; }
+.reveal--stagger.reveal--visible > *:nth-child(3) { transition-delay: 120ms; opacity: 1; transform: none; }
+.reveal--stagger.reveal--visible > *:nth-child(4) { transition-delay: 180ms; opacity: 1; transform: none; }
+.reveal--stagger.reveal--visible > *:nth-child(5) { transition-delay: 240ms; opacity: 1; transform: none; }
+.reveal--stagger.reveal--visible > *:nth-child(6) { transition-delay: 300ms; opacity: 1; transform: none; }
+.reveal--stagger.reveal--visible > *:nth-child(7) { transition-delay: 360ms; opacity: 1; transform: none; }
+.reveal--stagger.reveal--visible > *:nth-child(8) { transition-delay: 420ms; opacity: 1; transform: none; }
+.reveal--stagger.reveal--visible > *:nth-child(9) { transition-delay: 480ms; opacity: 1; transform: none; }
+.reveal--stagger.reveal--visible > *:nth-child(10) { transition-delay: 540ms; opacity: 1; transform: none; }
 
 /* Gold particles (hero) */
 .particle {
   position: absolute;
-  width: 4px;
-  height: 4px;
+  width: 3px;
+  height: 3px;
   background: var(--gold);
   border-radius: 50%;
   animation: floatUp linear infinite;
   pointer-events: none;
+  opacity: 0.3;
 }

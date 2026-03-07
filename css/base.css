@@ -1,5 +1,5 @@
 /* ============================================
-   Base Styles - Reset & Typography
+   Base Styles — Reset, Typography, Utilities
    ============================================ */
 
 *, *::before, *::after {
@@ -25,11 +25,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ─── Typography ─── */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 700;
   line-height: 1.2;
   color: var(--charcoal);
+  letter-spacing: -0.01em;
 }
 
 h1 { font-size: var(--text-4xl); }
@@ -41,6 +43,7 @@ h5 { font-size: var(--text-lg); }
 p {
   margin-bottom: var(--space-md);
   color: var(--text-secondary);
+  line-height: 1.8;
 }
 
 a {
@@ -49,9 +52,7 @@ a {
   transition: color var(--transition-fast);
 }
 
-a:hover {
-  color: var(--saffron);
-}
+a:hover { color: var(--saffron); }
 
 img {
   max-width: 100%;
@@ -67,88 +68,66 @@ button {
   font-size: inherit;
 }
 
-ul, ol {
-  list-style: none;
-}
+ul, ol { list-style: none; }
 
 ::selection {
   background-color: var(--gold);
   color: var(--charcoal);
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-::-webkit-scrollbar-track {
-  background: var(--ivory-warm);
-}
+/* ─── Utility Classes ─── */
+.text-devanagari { font-family: var(--font-accent); }
+.text-serif { font-family: var(--font-serif); }
+.text-gold { color: var(--gold); }
 
-::-webkit-scrollbar-thumb {
-  background: var(--gold);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--gold-dark);
-}
-
-/* Hindi/Sanskrit text */
-.text-devanagari {
-  font-family: var(--font-accent);
-}
-
-.text-gold {
-  color: var(--gold);
-}
-
-.text-maroon {
-  color: var(--maroon);
-}
-
-/* Section title ornament */
+/* ─── Section Title ─── */
 .section-title {
   text-align: center;
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-2xl);
   position: relative;
-  padding-bottom: var(--space-lg);
 }
 
 .section-title::after {
   content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: var(--gold);
+  margin: var(--space-lg) auto 0;
+  border-radius: 1px;
 }
 
 .section-title .subtitle {
   display: block;
   font-family: var(--font-accent);
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   color: var(--gold-dark);
-  letter-spacing: 2px;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-xs);
   font-weight: 400;
 }
 
 .section-title h2 {
-  margin-bottom: var(--space-sm);
+  margin-bottom: var(--space-xs);
 }
 
 .section-title .description {
+  font-family: var(--font-serif);
   font-size: var(--text-base);
   color: var(--text-muted);
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: var(--max-width-narrow);
+  margin: var(--space-sm) auto 0;
+  line-height: 1.8;
 }
 
-/* Visually hidden (accessibility) */
+/* Accessibility */
 .sr-only {
   position: absolute;
   width: 1px;
