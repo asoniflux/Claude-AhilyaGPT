@@ -1,5 +1,6 @@
 /* ============================================
-   AhilyaGPT - Court Personas with Text-to-Speech
+   AhilyaGPT - Court Personas with AI-Powered TTS
+   ElevenLabs integration + Enhanced browser fallback
    ============================================ */
 
 const courtPersonas = [
@@ -9,6 +10,11 @@ const courtPersonas = [
     title: { en: 'Lok Mata, Queen of Indore', hi: 'लोकमाता, इंदौर की रानी', mr: 'लोकमाता, इंदौरच्या राणी' },
     era: '1725–1795',
     avatar: { initials: 'AB', color: '#C5A355' },
+    // ElevenLabs voice config per persona
+    voiceConfig: {
+      elevenLabsVoiceId: 'EXAVITQu4vr4xnSDxMaL', // Sarah — warm, wise female
+      browserVoice: { gender: 'female', pitch: 1.05, rate: 0.88 }
+    },
     dialogues: [
       {
         text: {
@@ -58,6 +64,10 @@ const courtPersonas = [
     title: { en: 'Commander & Father-in-law', hi: 'सेनापति व ससुर', mr: 'सेनापती व सासरे' },
     era: '1693–1766',
     avatar: { initials: 'MR', color: '#8B2E3D' },
+    voiceConfig: {
+      elevenLabsVoiceId: 'pNInz6obpgDQGcFmaJgB', // Adam — deep, authoritative male
+      browserVoice: { gender: 'male', pitch: 0.85, rate: 0.85 }
+    },
     dialogues: [
       {
         text: {
@@ -99,6 +109,10 @@ const courtPersonas = [
     title: { en: 'Husband of Ahilya Bai', hi: 'अहिल्या बाई के पति', mr: 'अहिल्या बाईंचे पती' },
     era: '1723–1754',
     avatar: { initials: 'KH', color: '#6B1D2A' },
+    voiceConfig: {
+      elevenLabsVoiceId: 'VR6AewLTigWG4xSOukaG', // Arnold — young, earnest male
+      browserVoice: { gender: 'male', pitch: 1.0, rate: 0.9 }
+    },
     dialogues: [
       {
         text: {
@@ -132,6 +146,10 @@ const courtPersonas = [
     title: { en: 'Military Commander', hi: 'सेनापति', mr: 'सेनापती' },
     era: '1723–1797',
     avatar: { initials: 'TR', color: '#2A8B8B' },
+    voiceConfig: {
+      elevenLabsVoiceId: 'ErXwobaYiN019PkySvjV', // Antoni — confident, strong male
+      browserVoice: { gender: 'male', pitch: 0.9, rate: 0.92 }
+    },
     dialogues: [
       {
         text: {
@@ -165,6 +183,10 @@ const courtPersonas = [
     title: { en: 'Witness to Kashi Vishwanath', hi: 'काशी विश्वनाथ के साक्षी', mr: 'काशी विश्वनाथाचे साक्षीदार' },
     era: 'c. 1780',
     avatar: { initials: 'VP', color: '#D4722A' },
+    voiceConfig: {
+      elevenLabsVoiceId: 'onwK4e9ZLuTAKqWW03F9', // Daniel — warm, calm male
+      browserVoice: { gender: 'male', pitch: 1.1, rate: 0.82 }
+    },
     dialogues: [
       {
         text: {
@@ -190,6 +212,10 @@ const courtPersonas = [
     title: { en: 'Life on the Maheshwar Ghats', hi: 'महेश्वर घाटों पर जीवन', mr: 'माहेश्वर घाटांवरचे जीवन' },
     era: 'c. 1790',
     avatar: { initials: 'NB', color: '#4A7B3A' },
+    voiceConfig: {
+      elevenLabsVoiceId: 'TxGEqnHWrfWFTfGW9XjX', // Josh — friendly, everyday male
+      browserVoice: { gender: 'male', pitch: 1.05, rate: 0.95 }
+    },
     dialogues: [
       {
         text: {
@@ -215,6 +241,10 @@ const courtPersonas = [
     title: { en: 'Master of the Loom', hi: 'करघे के उस्ताद', mr: 'मागाचे उस्ताद' },
     era: 'c. 1785',
     avatar: { initials: 'MW', color: '#5A1525' },
+    voiceConfig: {
+      elevenLabsVoiceId: 'yoZ06aMxZJJ28mfd3POQ', // Sam — gentle, thoughtful male
+      browserVoice: { gender: 'male', pitch: 1.0, rate: 0.88 }
+    },
     dialogues: [
       {
         text: {
@@ -240,6 +270,10 @@ const courtPersonas = [
     title: { en: 'Diwan (Chief Minister)', hi: 'दीवान (मुख्यमंत्री)', mr: 'दिवाण (मुख्यमंत्री)' },
     era: 'c. 1770s',
     avatar: { initials: 'GC', color: '#3A5B8B' },
+    voiceConfig: {
+      elevenLabsVoiceId: 'N2lVS1w4EtoT3dr4eOWO', // Callum — professional, measured male
+      browserVoice: { gender: 'male', pitch: 0.95, rate: 0.85 }
+    },
     dialogues: [
       {
         text: {
@@ -261,14 +295,275 @@ const courtPersonas = [
   }
 ];
 
+/* ============================================
+   TTS Engine — ElevenLabs AI + Enhanced Browser Fallback
+   ============================================ */
+
+var ttsEngine = {
+  apiKey: Storage.get('elevenlabs_key', ''),
+  modelId: 'eleven_multilingual_v2',
+  currentAudio: null,
+  audioContext: null,
+  analyser: null,
+
+  isAIEnabled: function () {
+    return this.apiKey && this.apiKey.length > 20;
+  },
+
+  setApiKey: function (key) {
+    this.apiKey = key;
+    Storage.set('elevenlabs_key', key);
+  },
+
+  stop: function () {
+    // Stop ElevenLabs audio
+    if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio.currentTime = 0;
+      this.currentAudio = null;
+    }
+    // Stop browser TTS
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    isSpeaking = false;
+    updateSpeakingUI(false);
+  },
+
+  // Main speak method — routes to AI or browser
+  speak: function (text, lang, persona, onStart, onEnd) {
+    this.stop();
+
+    if (this.isAIEnabled()) {
+      this.speakWithElevenLabs(text, lang, persona, onStart, onEnd);
+    } else {
+      this.speakWithBrowser(text, lang, persona, onStart, onEnd);
+    }
+  },
+
+  // ─── ElevenLabs AI TTS ───
+  speakWithElevenLabs: function (text, lang, persona, onStart, onEnd) {
+    var self = this;
+    var voiceId = persona.voiceConfig.elevenLabsVoiceId;
+
+    // Voice settings tuned per-persona character
+    var voiceSettings = {
+      stability: 0.65,
+      similarity_boost: 0.8,
+      style: 0.45,
+      use_speaker_boost: true
+    };
+
+    if (onStart) onStart();
+
+    fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId + '/stream', {
+      method: 'POST',
+      headers: {
+        'Accept': 'audio/mpeg',
+        'Content-Type': 'application/json',
+        'xi-api-key': self.apiKey
+      },
+      body: JSON.stringify({
+        text: text,
+        model_id: self.modelId,
+        voice_settings: voiceSettings
+      })
+    })
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error('ElevenLabs API error: ' + response.status);
+      }
+      return response.blob();
+    })
+    .then(function (blob) {
+      var audioUrl = URL.createObjectURL(blob);
+      var audio = new Audio(audioUrl);
+      self.currentAudio = audio;
+
+      // Connect to analyser for waveform visualization
+      self.connectAnalyser(audio);
+
+      audio.onended = function () {
+        URL.revokeObjectURL(audioUrl);
+        self.currentAudio = null;
+        isSpeaking = false;
+        if (onEnd) onEnd();
+      };
+
+      audio.onerror = function () {
+        URL.revokeObjectURL(audioUrl);
+        self.currentAudio = null;
+        isSpeaking = false;
+        // Fallback to browser TTS
+        self.speakWithBrowser(text, lang, persona, null, onEnd);
+      };
+
+      audio.play();
+      isSpeaking = true;
+    })
+    .catch(function (err) {
+      console.warn('ElevenLabs TTS failed, falling back to browser:', err.message);
+      self.speakWithBrowser(text, lang, persona, null, onEnd);
+    });
+  },
+
+  // ─── Enhanced Browser TTS ───
+  speakWithBrowser: function (text, lang, persona, onStart, onEnd) {
+    if (!('speechSynthesis' in window)) {
+      if (onEnd) onEnd();
+      return;
+    }
+
+    var vc = persona.voiceConfig.browserVoice;
+    var langMap = { en: 'en-IN', hi: 'hi-IN', mr: 'mr-IN' };
+    var targetLang = langMap[lang] || 'en-IN';
+
+    // Break text into sentences for more natural delivery
+    var sentences = text.match(/[^.!?।]+[.!?।]+/g) || [text];
+    var sentenceIndex = 0;
+
+    function speakNext() {
+      if (sentenceIndex >= sentences.length) {
+        isSpeaking = false;
+        if (onEnd) onEnd();
+        return;
+      }
+
+      var sentence = sentences[sentenceIndex].trim();
+      if (!sentence) {
+        sentenceIndex++;
+        speakNext();
+        return;
+      }
+
+      var utterance = new SpeechSynthesisUtterance(sentence);
+      utterance.lang = targetLang;
+
+      // Natural prosody — vary rate and pitch per sentence
+      var rateVariation = (Math.random() * 0.06) - 0.03;
+      var pitchVariation = (Math.random() * 0.08) - 0.04;
+      utterance.rate = Math.max(0.7, Math.min(1.1, vc.rate + rateVariation));
+      utterance.pitch = Math.max(0.6, Math.min(1.4, vc.pitch + pitchVariation));
+      utterance.volume = 1;
+
+      // Find the best available voice
+      var voices = window.speechSynthesis.getVoices();
+      var bestVoice = findBestVoice(voices, targetLang, vc.gender);
+      if (bestVoice) {
+        utterance.voice = bestVoice;
+      }
+
+      utterance.onstart = function () {
+        if (sentenceIndex === 0 && onStart) onStart();
+        isSpeaking = true;
+      };
+
+      utterance.onend = function () {
+        sentenceIndex++;
+        // Natural pause between sentences (200-500ms)
+        var pause = 200 + Math.random() * 300;
+        setTimeout(speakNext, pause);
+      };
+
+      utterance.onerror = function () {
+        sentenceIndex++;
+        speakNext();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    speakNext();
+  },
+
+  // ─── Audio Analyser for Waveform ───
+  connectAnalyser: function (audio) {
+    try {
+      if (!this.audioContext) {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      this.analyser = this.audioContext.createAnalyser();
+      this.analyser.fftSize = 64;
+
+      var source = this.audioContext.createMediaElementSource(audio);
+      source.connect(this.analyser);
+      this.analyser.connect(this.audioContext.destination);
+    } catch (e) {
+      // AudioContext may fail in some browsers — non-critical
+    }
+  }
+};
+
+// Find the most natural sounding voice for a language
+function findBestVoice(voices, lang, gender) {
+  if (!voices.length) return null;
+
+  // Preferred natural-sounding voice names (Google/Microsoft premium voices)
+  var premiumKeywords = ['Google', 'Microsoft', 'Natural', 'Neural', 'Enhanced', 'Premium', 'Online'];
+  var roboticKeywords = ['eSpeak', 'MBROLA'];
+
+  // Filter by language
+  var langVoices = voices.filter(function (v) {
+    return v.lang === lang || v.lang.startsWith(lang.split('-')[0]);
+  });
+
+  if (!langVoices.length) {
+    // Fallback: try just the language prefix
+    var prefix = lang.split('-')[0];
+    langVoices = voices.filter(function (v) {
+      return v.lang.startsWith(prefix);
+    });
+  }
+
+  if (!langVoices.length) return null;
+
+  // Score each voice
+  var scored = langVoices.map(function (voice) {
+    var score = 0;
+
+    // Prefer premium/natural voices
+    premiumKeywords.forEach(function (kw) {
+      if (voice.name.indexOf(kw) !== -1) score += 10;
+    });
+
+    // Penalize robotic voices
+    roboticKeywords.forEach(function (kw) {
+      if (voice.name.indexOf(kw) !== -1) score -= 20;
+    });
+
+    // Prefer non-local (network) voices — they're usually better
+    if (!voice.localService) score += 5;
+
+    // Gender matching via name heuristics
+    var femaleNames = ['female', 'woman', 'zira', 'hazel', 'susan', 'heera', 'kalpana', 'priya', 'aditi'];
+    var maleNames = ['male', 'man', 'david', 'mark', 'ravi', 'hemant', 'madhur'];
+    var nameLower = voice.name.toLowerCase();
+
+    if (gender === 'female') {
+      femaleNames.forEach(function (n) { if (nameLower.indexOf(n) !== -1) score += 3; });
+    } else {
+      maleNames.forEach(function (n) { if (nameLower.indexOf(n) !== -1) score += 3; });
+    }
+
+    return { voice: voice, score: score };
+  });
+
+  scored.sort(function (a, b) { return b.score - a.score; });
+  return scored[0].voice;
+}
+
+
+/* ============================================
+   Court UI — Cards, Speech, Waveform
+   ============================================ */
+
 // State
-let activeCardId = null;
-let dialogueIndices = {};
-let currentSpeechUtterance = null;
+var activeCardId = null;
+var dialogueIndices = {};
 var isSpeaking = false;
 
 function initCourt() {
-  const grid = document.getElementById('court-grid');
+  var grid = document.getElementById('court-grid');
   if (!grid) return;
 
   // Initialize dialogue counters
@@ -278,18 +573,17 @@ function initCourt() {
 
   renderCourtCards();
 
-  // Listen for language changes
   EventBus.on('lang:changed', function () {
     renderCourtCards();
   });
 }
 
 function renderCourtCards() {
-  const grid = document.getElementById('court-grid');
+  var grid = document.getElementById('court-grid');
   var lang = currentLang || 'en';
 
   grid.innerHTML = courtPersonas.map(function (persona) {
-    const progressDots = persona.dialogues.map(function (_, i) {
+    var progressDots = persona.dialogues.map(function (_, i) {
       return '<span class="court-card__progress-dot" data-index="' + i + '"></span>';
     }).join('');
 
@@ -304,10 +598,11 @@ function renderCourtCards() {
       '<p class="court-card__title">' + title + '</p>' +
       '<p class="court-card__era">' + persona.era + '</p>' +
       '<div class="court-card__buttons">' +
-        '<button class="court-card__speak-btn" data-i18n-html="court.speak">' + t('court.speak') + '</button>' +
-        '<button class="court-card__listen-btn" data-i18n-html="court.listen">' + t('court.listen') + '</button>' +
+        '<button class="court-card__speak-btn">' + t('court.speak') + '</button>' +
+        '<button class="court-card__listen-btn">' + t('court.listen') + '</button>' +
       '</div>' +
       '<div class="court-card__speech" id="speech-' + persona.id + '">' +
+        '<div class="court-card__waveform" id="waveform-' + persona.id + '"></div>' +
         '<span class="court-card__speech-text" id="speech-text-' + persona.id + '"></span>' +
         '<span class="court-card__speech-cursor"></span>' +
         '<span class="court-card__speech-source" id="speech-source-' + persona.id + '"></span>' +
@@ -318,36 +613,55 @@ function renderCourtCards() {
     '</div>';
   }).join('');
 
-  // Add click handlers
+  // Voice settings button
+  var settingsExists = document.getElementById('voice-settings-btn');
+  if (!settingsExists) {
+    var settingsBtn = document.createElement('div');
+    settingsBtn.className = 'voice-settings-trigger';
+    settingsBtn.innerHTML = '<button class="voice-settings-btn" id="voice-settings-btn">' +
+      (ttsEngine.isAIEnabled() ? '🟢' : '⚙️') + ' ' +
+      (ttsEngine.isAIEnabled() ? 'AI Voice Active' : 'Enable AI Voice') +
+      '</button>';
+    var section = document.querySelector('.court .section-title');
+    if (section) section.appendChild(settingsBtn);
+  }
+
+  // Event delegation
   grid.addEventListener('click', function (e) {
     var speakBtn = e.target.closest('.court-card__speak-btn');
     var listenBtn = e.target.closest('.court-card__listen-btn');
     var card = e.target.closest('.court-card');
     if (!card) return;
-
     var personaId = card.dataset.persona;
 
     if (speakBtn) {
-      handleSpeak(personaId);
+      handleSpeak(personaId, false);
     } else if (listenBtn) {
       handleSpeak(personaId, true);
+    }
+  });
+
+  // Voice settings click
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('#voice-settings-btn')) {
+      openVoiceSettings();
     }
   });
 }
 
 function handleSpeak(personaId, withTTS) {
-  const persona = courtPersonas.find(function (p) { return p.id === personaId; });
+  var persona = courtPersonas.find(function (p) { return p.id === personaId; });
   if (!persona) return;
 
   var lang = currentLang || 'en';
 
-  const allCards = document.querySelectorAll('.court-card');
-  const speech = document.getElementById('speech-' + personaId);
-  const textEl = document.getElementById('speech-text-' + personaId);
-  const sourceEl = document.getElementById('speech-source-' + personaId);
-  const progressEl = document.getElementById('progress-' + personaId);
+  var allCards = document.querySelectorAll('.court-card');
+  var speech = document.getElementById('speech-' + personaId);
+  var textEl = document.getElementById('speech-text-' + personaId);
+  var sourceEl = document.getElementById('speech-source-' + personaId);
+  var progressEl = document.getElementById('progress-' + personaId);
 
-  // Set active/dimmed states
+  // Set active/dimmed
   activeCardId = personaId;
   allCards.forEach(function (c) {
     if (c.dataset.persona === personaId) {
@@ -359,7 +673,7 @@ function handleSpeak(personaId, withTTS) {
     }
   });
 
-  // Get current dialogue
+  // Get dialogue
   var idx = dialogueIndices[personaId];
   var dialogue = persona.dialogues[idx];
   var dialogueText = dialogue.text[lang] || dialogue.text.en;
@@ -369,18 +683,26 @@ function handleSpeak(personaId, withTTS) {
   speech.classList.add('court-card__speech--visible');
   progressEl.style.display = 'flex';
 
-  // Stop any ongoing TTS
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-  }
+  // Stop any current audio
+  ttsEngine.stop();
 
   // Typewriter effect
   typeWriter(textEl, dialogueText, function () {
     sourceEl.textContent = '— ' + sourceText;
 
-    // Text-to-speech if requested
-    if (withTTS && 'speechSynthesis' in window) {
-      speakText(dialogueText, lang);
+    if (withTTS) {
+      ttsEngine.speak(dialogueText, lang, persona,
+        function () {
+          // onStart
+          updateSpeakingUI(true, personaId);
+          startWaveformAnimation(personaId);
+        },
+        function () {
+          // onEnd
+          updateSpeakingUI(false);
+          stopWaveformAnimation(personaId);
+        }
+      );
     }
   });
 
@@ -390,53 +712,191 @@ function handleSpeak(personaId, withTTS) {
     dot.classList.toggle('court-card__progress-dot--active', i <= idx);
   });
 
-  // Advance index
   dialogueIndices[personaId] = (idx + 1) % persona.dialogues.length;
-
-  // Track for badges
   EventBus.emit('badge:increment', { badge: 'darbarListener' });
 }
 
-function speakText(text, lang) {
-  if (!('speechSynthesis' in window)) return;
-
-  var utterance = new SpeechSynthesisUtterance(text);
-
-  // Map language to speech synthesis lang code
-  var langMap = { en: 'en-IN', hi: 'hi-IN', mr: 'mr-IN' };
-  utterance.lang = langMap[lang] || 'en-IN';
-  utterance.rate = 0.9;
-  utterance.pitch = 1;
-
-  // Try to find a matching voice
-  var voices = window.speechSynthesis.getVoices();
-  var preferredVoice = voices.find(function (v) {
-    return v.lang === utterance.lang;
-  });
-  if (preferredVoice) {
-    utterance.voice = preferredVoice;
-  }
-
-  utterance.onstart = function () {
-    isSpeaking = true;
+function updateSpeakingUI(speaking, personaId) {
+  if (speaking && personaId) {
     document.querySelectorAll('.court-card__listen-btn').forEach(function (btn) {
       var card = btn.closest('.court-card');
-      if (card && card.dataset.persona === activeCardId) {
+      if (card && card.dataset.persona === personaId) {
         btn.classList.add('court-card__listen-btn--speaking');
+        btn.textContent = '⏹ Stop';
       }
     });
-  };
-
-  utterance.onend = function () {
-    isSpeaking = false;
+  } else {
     document.querySelectorAll('.court-card__listen-btn--speaking').forEach(function (btn) {
       btn.classList.remove('court-card__listen-btn--speaking');
+      btn.textContent = t('court.listen');
     });
-  };
-
-  window.speechSynthesis.speak(utterance);
+  }
 }
 
+// ─── Waveform Visualization ───
+var waveformAnimationId = null;
+
+function startWaveformAnimation(personaId) {
+  var container = document.getElementById('waveform-' + personaId);
+  if (!container) return;
+
+  // Create bars if not present
+  if (!container.children.length) {
+    for (var i = 0; i < 24; i++) {
+      var bar = document.createElement('span');
+      bar.className = 'waveform-bar';
+      container.appendChild(bar);
+    }
+  }
+
+  container.classList.add('court-card__waveform--active');
+
+  function animate() {
+    var bars = container.querySelectorAll('.waveform-bar');
+
+    if (ttsEngine.analyser) {
+      // Real audio data from ElevenLabs
+      var dataArray = new Uint8Array(ttsEngine.analyser.frequencyBinCount);
+      ttsEngine.analyser.getByteFrequencyData(dataArray);
+      bars.forEach(function (bar, i) {
+        var value = dataArray[i] || 0;
+        var height = Math.max(2, (value / 255) * 24);
+        bar.style.height = height + 'px';
+      });
+    } else {
+      // Simulated waveform for browser TTS
+      bars.forEach(function (bar) {
+        var h = 2 + Math.random() * 18;
+        bar.style.height = h + 'px';
+      });
+    }
+
+    if (isSpeaking) {
+      waveformAnimationId = requestAnimationFrame(animate);
+    }
+  }
+
+  animate();
+}
+
+function stopWaveformAnimation(personaId) {
+  if (waveformAnimationId) {
+    cancelAnimationFrame(waveformAnimationId);
+    waveformAnimationId = null;
+  }
+  var container = document.getElementById('waveform-' + personaId);
+  if (container) {
+    container.classList.remove('court-card__waveform--active');
+    container.querySelectorAll('.waveform-bar').forEach(function (bar) {
+      bar.style.height = '2px';
+    });
+  }
+}
+
+// ─── Voice Settings Modal ───
+function openVoiceSettings() {
+  // Remove existing modal
+  var existing = document.getElementById('voice-settings-modal');
+  if (existing) existing.remove();
+
+  var isActive = ttsEngine.isAIEnabled();
+  var currentKey = ttsEngine.apiKey || '';
+  var maskedKey = currentKey ? currentKey.substring(0, 8) + '...' + currentKey.substring(currentKey.length - 4) : '';
+
+  var modal = document.createElement('div');
+  modal.className = 'voice-modal-overlay';
+  modal.id = 'voice-settings-modal';
+  modal.innerHTML =
+    '<div class="voice-modal">' +
+      '<div class="voice-modal__header">' +
+        '<h3>AI Voice Settings</h3>' +
+        '<button class="voice-modal__close" id="voice-modal-close">&times;</button>' +
+      '</div>' +
+      '<div class="voice-modal__body">' +
+        '<p class="voice-modal__desc">' +
+          'Connect your free <strong>ElevenLabs</strong> API key to hear the personas speak with natural, human-like AI voices in English, Hindi, and Marathi.' +
+        '</p>' +
+        '<div class="voice-modal__status voice-modal__status--' + (isActive ? 'active' : 'inactive') + '">' +
+          '<span class="voice-modal__status-dot"></span>' +
+          (isActive ? 'AI Voice Active — ' + maskedKey : 'Using browser voices (robotic)') +
+        '</div>' +
+        '<div class="voice-modal__field">' +
+          '<label for="elevenlabs-key-input">ElevenLabs API Key</label>' +
+          '<input type="password" id="elevenlabs-key-input" placeholder="Enter your API key..." value="' + currentKey + '" autocomplete="off">' +
+          '<p class="voice-modal__hint">' +
+            'Get a free key at <strong>elevenlabs.io</strong> — 10,000 characters/month free.' +
+          '</p>' +
+        '</div>' +
+        '<div class="voice-modal__actions">' +
+          '<button class="btn btn--gold" id="voice-save-btn">Save & Activate</button>' +
+          (isActive ? '<button class="btn btn--outline" id="voice-clear-btn" style="margin-left: 8px;">Remove Key</button>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  document.body.appendChild(modal);
+
+  // Focus input
+  setTimeout(function () {
+    document.getElementById('elevenlabs-key-input').focus();
+  }, 100);
+
+  // Close
+  document.getElementById('voice-modal-close').addEventListener('click', function () {
+    modal.remove();
+  });
+
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) modal.remove();
+  });
+
+  // Save
+  document.getElementById('voice-save-btn').addEventListener('click', function () {
+    var key = document.getElementById('elevenlabs-key-input').value.trim();
+    ttsEngine.setApiKey(key);
+
+    // Update the settings button
+    var btn = document.getElementById('voice-settings-btn');
+    if (btn) {
+      btn.innerHTML = ttsEngine.isAIEnabled()
+        ? '🟢 AI Voice Active'
+        : '⚙️ Enable AI Voice';
+    }
+
+    modal.remove();
+
+    // Show confirmation toast
+    if (ttsEngine.isAIEnabled()) {
+      showToast('🎙️', 'AI Voice Activated', 'Personas will now speak with natural human-like voices.');
+    }
+  });
+
+  // Clear
+  var clearBtn = document.getElementById('voice-clear-btn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+      ttsEngine.setApiKey('');
+      var btn = document.getElementById('voice-settings-btn');
+      if (btn) btn.innerHTML = '⚙️ Enable AI Voice';
+      modal.remove();
+    });
+  }
+}
+
+function showToast(icon, title, text) {
+  var container = document.getElementById('toast-container');
+  if (!container) return;
+  var toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = '<span class="toast__icon">' + icon + '</span><span class="toast__text"><strong>' + title + '</strong>' + text + '</span>';
+  container.appendChild(toast);
+  setTimeout(function () {
+    toast.classList.add('toast--exit');
+    setTimeout(function () { toast.remove(); }, 300);
+  }, 4000);
+}
+
+// Typewriter
 var typewriterTimeout = null;
 function typeWriter(el, text, onComplete) {
   if (typewriterTimeout) clearTimeout(typewriterTimeout);
@@ -446,7 +906,7 @@ function typeWriter(el, text, onComplete) {
     if (i < text.length) {
       el.textContent += text[i];
       i++;
-      typewriterTimeout = setTimeout(tick, 20);
+      typewriterTimeout = setTimeout(tick, 18);
     } else {
       if (onComplete) onComplete();
     }
@@ -456,18 +916,17 @@ function typeWriter(el, text, onComplete) {
 
 // Clear dimming on click outside
 document.addEventListener('click', function (e) {
-  if (!e.target.closest('.court-card') && !e.target.closest('.court-card__speak-btn') && !e.target.closest('.court-card__listen-btn')) {
+  if (!e.target.closest('.court-card') && !e.target.closest('.court-card__speak-btn') &&
+      !e.target.closest('.court-card__listen-btn') && !e.target.closest('.voice-modal') &&
+      !e.target.closest('#voice-settings-btn')) {
     document.querySelectorAll('.court-card').forEach(function (c) {
       c.classList.remove('court-card--dimmed', 'court-card--active');
     });
-    // Stop TTS if clicking outside
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
+    ttsEngine.stop();
   }
 });
 
-// Load voices (needed for some browsers)
+// Load voices on init
 if ('speechSynthesis' in window) {
   window.speechSynthesis.onvoiceschanged = function () {
     window.speechSynthesis.getVoices();
