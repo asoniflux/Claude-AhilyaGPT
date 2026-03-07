@@ -296,7 +296,11 @@ const courtPersonas = [
 ];
 
 /* ============================================
-   TTS Engine — ElevenLabs AI + Enhanced Browser Fallback
+   TTS Engine — Free AI Voice (Hugging Face) + ElevenLabs Premium + Browser Fallback
+   Three tiers:
+     1. ElevenLabs (premium, needs API key)
+     2. Hugging Face Inference API (free, no key needed, natural AI voices)
+     3. Browser SpeechSynthesis (fallback)
    ============================================ */
 
 var ttsEngine = {
@@ -305,9 +309,24 @@ var ttsEngine = {
   currentAudio: null,
   audioContext: null,
   analyser: null,
+  // Voice mode: 'auto' (best available), 'elevenlabs', 'huggingface', 'browser'
+  voiceMode: Storage.get('voice_mode', 'auto'),
+  hfToken: Storage.get('hf_token', ''),
 
-  isAIEnabled: function () {
+  // Hugging Face model config per language — free, no API key required
+  hfModels: {
+    en: 'facebook/mms-tts-eng',
+    hi: 'facebook/mms-tts-hin',
+    mr: 'facebook/mms-tts-mar'
+  },
+
+  isElevenLabsEnabled: function () {
     return this.apiKey && this.apiKey.length > 20;
+  },
+
+  // Legacy alias
+  isAIEnabled: function () {
+    return this.isElevenLabsEnabled() || this.voiceMode === 'huggingface' || this.voiceMode === 'auto';
   },
 
   setApiKey: function (key) {
@@ -315,8 +334,18 @@ var ttsEngine = {
     Storage.set('elevenlabs_key', key);
   },
 
+  setVoiceMode: function (mode) {
+    this.voiceMode = mode;
+    Storage.set('voice_mode', mode);
+  },
+
+  setHfToken: function (token) {
+    this.hfToken = token;
+    Storage.set('hf_token', token);
+  },
+
   stop: function () {
-    // Stop ElevenLabs audio
+    // Stop audio playback
     if (this.currentAudio) {
       this.currentAudio.pause();
       this.currentAudio.currentTime = 0;
@@ -330,23 +359,33 @@ var ttsEngine = {
     updateSpeakingUI(false);
   },
 
-  // Main speak method — routes to AI or browser
+  // Main speak method — routes based on voice mode
   speak: function (text, lang, persona, onStart, onEnd) {
     this.stop();
 
-    if (this.isAIEnabled()) {
+    var mode = this.voiceMode;
+
+    if (mode === 'elevenlabs' && this.isElevenLabsEnabled()) {
       this.speakWithElevenLabs(text, lang, persona, onStart, onEnd);
-    } else {
+    } else if (mode === 'browser') {
       this.speakWithBrowser(text, lang, persona, onStart, onEnd);
+    } else if (mode === 'huggingface') {
+      this.speakWithHuggingFace(text, lang, persona, onStart, onEnd);
+    } else {
+      // Auto mode: ElevenLabs > Hugging Face > Browser
+      if (this.isElevenLabsEnabled()) {
+        this.speakWithElevenLabs(text, lang, persona, onStart, onEnd);
+      } else {
+        this.speakWithHuggingFace(text, lang, persona, onStart, onEnd);
+      }
     }
   },
 
-  // ─── ElevenLabs AI TTS ───
+  // ─── ElevenLabs AI TTS (Premium) ───
   speakWithElevenLabs: function (text, lang, persona, onStart, onEnd) {
     var self = this;
     var voiceId = persona.voiceConfig.elevenLabsVoiceId;
 
-    // Voice settings tuned per-persona character
     var voiceSettings = {
       stability: 0.65,
       similarity_boost: 0.8,
@@ -376,35 +415,102 @@ var ttsEngine = {
       return response.blob();
     })
     .then(function (blob) {
-      var audioUrl = URL.createObjectURL(blob);
-      var audio = new Audio(audioUrl);
-      self.currentAudio = audio;
-
-      // Connect to analyser for waveform visualization
-      self.connectAnalyser(audio);
-
-      audio.onended = function () {
-        URL.revokeObjectURL(audioUrl);
-        self.currentAudio = null;
-        isSpeaking = false;
-        if (onEnd) onEnd();
-      };
-
-      audio.onerror = function () {
-        URL.revokeObjectURL(audioUrl);
-        self.currentAudio = null;
-        isSpeaking = false;
-        // Fallback to browser TTS
-        self.speakWithBrowser(text, lang, persona, null, onEnd);
-      };
-
-      audio.play();
-      isSpeaking = true;
+      self.playAudioBlob(blob, onEnd);
     })
     .catch(function (err) {
-      console.warn('ElevenLabs TTS failed, falling back to browser:', err.message);
+      console.warn('ElevenLabs TTS failed, falling back to free AI voice:', err.message);
+      self.speakWithHuggingFace(text, lang, persona, null, onEnd);
+    });
+  },
+
+  // ─── Hugging Face Free AI TTS ───
+  speakWithHuggingFace: function (text, lang, persona, onStart, onEnd) {
+    var self = this;
+    var modelId = self.hfModels[lang] || self.hfModels.en;
+
+    if (onStart) onStart();
+
+    var headers = {
+      'Content-Type': 'application/json'
+    };
+
+    // Optional: use HF token for higher rate limits (but works without it)
+    if (self.hfToken) {
+      headers['Authorization'] = 'Bearer ' + self.hfToken;
+    }
+
+    fetch('https://api-inference.huggingface.co/models/' + modelId, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({ inputs: text })
+    })
+    .then(function (response) {
+      if (response.status === 503) {
+        // Model is loading — wait and retry once
+        return response.json().then(function (data) {
+          var waitTime = Math.min((data.estimated_time || 10) * 1000, 30000);
+          return new Promise(function (resolve) {
+            setTimeout(function () {
+              fetch('https://api-inference.huggingface.co/models/' + modelId, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({ inputs: text })
+              }).then(resolve);
+            }, waitTime);
+          });
+        });
+      }
+      if (!response.ok) {
+        throw new Error('HuggingFace API error: ' + response.status);
+      }
+      return response;
+    })
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error('HuggingFace API error after retry: ' + response.status);
+      }
+      return response.blob();
+    })
+    .then(function (blob) {
+      self.playAudioBlob(blob, onEnd);
+    })
+    .catch(function (err) {
+      console.warn('HuggingFace TTS failed, falling back to browser:', err.message);
       self.speakWithBrowser(text, lang, persona, null, onEnd);
     });
+  },
+
+  // ─── Shared audio playback for AI TTS ───
+  playAudioBlob: function (blob, onEnd) {
+    var self = this;
+    var audioUrl = URL.createObjectURL(blob);
+    var audio = new Audio(audioUrl);
+    self.currentAudio = audio;
+
+    // Connect to analyser for waveform visualization
+    self.connectAnalyser(audio);
+
+    audio.onended = function () {
+      URL.revokeObjectURL(audioUrl);
+      self.currentAudio = null;
+      isSpeaking = false;
+      if (onEnd) onEnd();
+    };
+
+    audio.onerror = function () {
+      URL.revokeObjectURL(audioUrl);
+      self.currentAudio = null;
+      isSpeaking = false;
+      if (onEnd) onEnd();
+    };
+
+    audio.play().catch(function () {
+      URL.revokeObjectURL(audioUrl);
+      self.currentAudio = null;
+      isSpeaking = false;
+      if (onEnd) onEnd();
+    });
+    isSpeaking = true;
   },
 
   // ─── Enhanced Browser TTS ───
@@ -619,8 +725,7 @@ function renderCourtCards() {
     var settingsBtn = document.createElement('div');
     settingsBtn.className = 'voice-settings-trigger';
     settingsBtn.innerHTML = '<button class="voice-settings-btn" id="voice-settings-btn">' +
-      (ttsEngine.isAIEnabled() ? '🟢' : '⚙️') + ' ' +
-      (ttsEngine.isAIEnabled() ? 'AI Voice Active' : 'Enable AI Voice') +
+      getVoiceButtonLabel() +
       '</button>';
     var section = document.querySelector('.court .section-title');
     if (section) section.appendChild(settingsBtn);
@@ -755,7 +860,7 @@ function startWaveformAnimation(personaId) {
     var bars = container.querySelectorAll('.waveform-bar');
 
     if (ttsEngine.analyser) {
-      // Real audio data from ElevenLabs
+      // Real audio data from AI TTS
       var dataArray = new Uint8Array(ttsEngine.analyser.frequencyBinCount);
       ttsEngine.analyser.getByteFrequencyData(dataArray);
       bars.forEach(function (bar, i) {
@@ -793,15 +898,40 @@ function stopWaveformAnimation(personaId) {
   }
 }
 
+// ─── Voice Settings Helper ───
+function getVoiceButtonLabel() {
+  var mode = ttsEngine.voiceMode;
+  if (mode === 'elevenlabs' && ttsEngine.isElevenLabsEnabled()) {
+    return '🟢 ElevenLabs Active';
+  } else if (mode === 'huggingface' || (mode === 'auto' && !ttsEngine.isElevenLabsEnabled())) {
+    return '🟢 Free AI Voice';
+  } else if (mode === 'auto' && ttsEngine.isElevenLabsEnabled()) {
+    return '🟢 ElevenLabs Active';
+  } else if (mode === 'browser') {
+    return '🔊 Browser Voice';
+  }
+  return '🟢 Free AI Voice';
+}
+
+function getVoiceStatusText() {
+  var mode = ttsEngine.voiceMode;
+  if (mode === 'elevenlabs' && ttsEngine.isElevenLabsEnabled()) {
+    return { active: true, text: 'ElevenLabs Premium Active' };
+  } else if (mode === 'browser') {
+    return { active: false, text: 'Browser voices (basic quality)' };
+  }
+  return { active: true, text: 'Free AI Voice Active (Hugging Face)' };
+}
+
 // ─── Voice Settings Modal ───
 function openVoiceSettings() {
-  // Remove existing modal
   var existing = document.getElementById('voice-settings-modal');
   if (existing) existing.remove();
 
-  var isActive = ttsEngine.isAIEnabled();
+  var currentMode = ttsEngine.voiceMode;
   var currentKey = ttsEngine.apiKey || '';
-  var maskedKey = currentKey ? currentKey.substring(0, 8) + '...' + currentKey.substring(currentKey.length - 4) : '';
+  var currentHfToken = ttsEngine.hfToken || '';
+  var status = getVoiceStatusText();
 
   var modal = document.createElement('div');
   modal.className = 'voice-modal-overlay';
@@ -809,78 +939,130 @@ function openVoiceSettings() {
   modal.innerHTML =
     '<div class="voice-modal">' +
       '<div class="voice-modal__header">' +
-        '<h3>AI Voice Settings</h3>' +
+        '<h3>Voice Settings</h3>' +
         '<button class="voice-modal__close" id="voice-modal-close">&times;</button>' +
       '</div>' +
       '<div class="voice-modal__body">' +
         '<p class="voice-modal__desc">' +
-          'Connect your free <strong>ElevenLabs</strong> API key to hear the personas speak with natural, human-like AI voices in English, Hindi, and Marathi.' +
+          'Choose how the personas speak. <strong>Free AI Voice</strong> uses Meta\'s MMS neural models via Hugging Face — natural-sounding voices in English, Hindi, and Marathi with no API key needed.' +
         '</p>' +
-        '<div class="voice-modal__status voice-modal__status--' + (isActive ? 'active' : 'inactive') + '">' +
+        '<div class="voice-modal__status voice-modal__status--' + (status.active ? 'active' : 'inactive') + '">' +
           '<span class="voice-modal__status-dot"></span>' +
-          (isActive ? 'AI Voice Active — ' + maskedKey : 'Using browser voices (robotic)') +
+          status.text +
         '</div>' +
-        '<div class="voice-modal__field">' +
+
+        // Voice mode selector
+        '<div class="voice-modal__modes">' +
+          '<label class="voice-modal__mode' + (currentMode === 'auto' || currentMode === 'huggingface' ? ' voice-modal__mode--selected' : '') + '">' +
+            '<input type="radio" name="voice-mode" value="huggingface"' + (currentMode === 'auto' || currentMode === 'huggingface' ? ' checked' : '') + '>' +
+            '<div class="voice-modal__mode-content">' +
+              '<span class="voice-modal__mode-badge voice-modal__mode-badge--free">FREE</span>' +
+              '<strong>AI Voice (Hugging Face)</strong>' +
+              '<span class="voice-modal__mode-desc">Natural neural voices — English, Hindi, Marathi. No API key required.</span>' +
+            '</div>' +
+          '</label>' +
+          '<label class="voice-modal__mode' + (currentMode === 'elevenlabs' ? ' voice-modal__mode--selected' : '') + '">' +
+            '<input type="radio" name="voice-mode" value="elevenlabs"' + (currentMode === 'elevenlabs' ? ' checked' : '') + '>' +
+            '<div class="voice-modal__mode-content">' +
+              '<span class="voice-modal__mode-badge voice-modal__mode-badge--premium">PREMIUM</span>' +
+              '<strong>ElevenLabs</strong>' +
+              '<span class="voice-modal__mode-desc">Ultra-realistic voices with unique persona characters. Requires API key.</span>' +
+            '</div>' +
+          '</label>' +
+          '<label class="voice-modal__mode' + (currentMode === 'browser' ? ' voice-modal__mode--selected' : '') + '">' +
+            '<input type="radio" name="voice-mode" value="browser"' + (currentMode === 'browser' ? ' checked' : '') + '>' +
+            '<div class="voice-modal__mode-content">' +
+              '<strong>Browser Built-in</strong>' +
+              '<span class="voice-modal__mode-desc">Uses your device\'s built-in voices. Quality varies by browser/OS.</span>' +
+            '</div>' +
+          '</label>' +
+        '</div>' +
+
+        // ElevenLabs key field (shown when ElevenLabs mode selected)
+        '<div class="voice-modal__field voice-modal__elevenlabs-field" id="elevenlabs-field" style="' + (currentMode === 'elevenlabs' ? '' : 'display:none') + '">' +
           '<label for="elevenlabs-key-input">ElevenLabs API Key</label>' +
-          '<input type="password" id="elevenlabs-key-input" placeholder="Enter your API key..." value="' + currentKey + '" autocomplete="off">' +
+          '<input type="password" id="elevenlabs-key-input" placeholder="Enter your ElevenLabs API key..." value="' + currentKey + '" autocomplete="off">' +
           '<p class="voice-modal__hint">' +
-            'Get a free key at <strong>elevenlabs.io</strong> — 10,000 characters/month free.' +
+            'Get a free key at <strong>elevenlabs.io</strong> — 10,000 characters/month free tier.' +
           '</p>' +
         '</div>' +
-        '<div class="voice-modal__actions">' +
-          '<button class="btn btn--gold" id="voice-save-btn">Save & Activate</button>' +
-          (isActive ? '<button class="btn btn--outline" id="voice-clear-btn" style="margin-left: 8px;">Remove Key</button>' : '') +
+
+        // Optional HF token field
+        '<div class="voice-modal__field voice-modal__hf-field" id="hf-field" style="' + (currentMode === 'auto' || currentMode === 'huggingface' ? '' : 'display:none') + '">' +
+          '<label for="hf-token-input">Hugging Face Token (Optional)</label>' +
+          '<input type="password" id="hf-token-input" placeholder="Optional — for higher rate limits..." value="' + currentHfToken + '" autocomplete="off">' +
+          '<p class="voice-modal__hint">' +
+            'Works without a token. Add a free <strong>huggingface.co</strong> token for higher rate limits.' +
+          '</p>' +
         '</div>' +
+
+      '</div>' +
+      '<div class="voice-modal__actions">' +
+        '<button class="btn btn--gold" id="voice-save-btn">Save & Activate</button>' +
       '</div>' +
     '</div>';
 
   document.body.appendChild(modal);
 
-  // Focus input
-  setTimeout(function () {
-    document.getElementById('elevenlabs-key-input').focus();
-  }, 100);
+  // Animate open
+  requestAnimationFrame(function () {
+    // modal visible by default
+  });
+
+  // Mode switching
+  modal.querySelectorAll('input[name="voice-mode"]').forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      var mode = this.value;
+      // Update selected state
+      modal.querySelectorAll('.voice-modal__mode').forEach(function (m) {
+        m.classList.remove('voice-modal__mode--selected');
+      });
+      this.closest('.voice-modal__mode').classList.add('voice-modal__mode--selected');
+
+      // Show/hide relevant fields
+      var elField = document.getElementById('elevenlabs-field');
+      var hfField = document.getElementById('hf-field');
+      elField.style.display = mode === 'elevenlabs' ? '' : 'none';
+      hfField.style.display = (mode === 'huggingface' || mode === 'auto') ? '' : 'none';
+    });
+  });
 
   // Close
   document.getElementById('voice-modal-close').addEventListener('click', function () {
-    modal.remove();
+    modal.classList.add('voice-modal-overlay--closing');
+    setTimeout(function () { modal.remove(); }, 200);
   });
 
   modal.addEventListener('click', function (e) {
-    if (e.target === modal) modal.remove();
+    if (e.target === modal) {
+      modal.classList.add('voice-modal-overlay--closing');
+      setTimeout(function () { modal.remove(); }, 200);
+    }
   });
 
   // Save
   document.getElementById('voice-save-btn').addEventListener('click', function () {
-    var key = document.getElementById('elevenlabs-key-input').value.trim();
-    ttsEngine.setApiKey(key);
+    var selectedMode = modal.querySelector('input[name="voice-mode"]:checked').value;
+    ttsEngine.setVoiceMode(selectedMode);
+
+    // Save API keys
+    var elKey = document.getElementById('elevenlabs-key-input').value.trim();
+    ttsEngine.setApiKey(elKey);
+
+    var hfToken = document.getElementById('hf-token-input').value.trim();
+    ttsEngine.setHfToken(hfToken);
 
     // Update the settings button
     var btn = document.getElementById('voice-settings-btn');
-    if (btn) {
-      btn.innerHTML = ttsEngine.isAIEnabled()
-        ? '🟢 AI Voice Active'
-        : '⚙️ Enable AI Voice';
-    }
+    if (btn) btn.innerHTML = getVoiceButtonLabel();
 
-    modal.remove();
+    modal.classList.add('voice-modal-overlay--closing');
+    setTimeout(function () { modal.remove(); }, 200);
 
-    // Show confirmation toast
-    if (ttsEngine.isAIEnabled()) {
-      showToast('🎙️', 'AI Voice Activated', 'Personas will now speak with natural human-like voices.');
-    }
+    // Show confirmation
+    var modeNames = { huggingface: 'Free AI Voice', elevenlabs: 'ElevenLabs Premium', browser: 'Browser Voice', auto: 'Auto (Best Available)' };
+    showToast('🎙️', modeNames[selectedMode] + ' Activated', 'Personas will now speak with ' + (selectedMode === 'browser' ? 'browser voices.' : 'AI-powered natural voices.'));
   });
-
-  // Clear
-  var clearBtn = document.getElementById('voice-clear-btn');
-  if (clearBtn) {
-    clearBtn.addEventListener('click', function () {
-      ttsEngine.setApiKey('');
-      var btn = document.getElementById('voice-settings-btn');
-      if (btn) btn.innerHTML = '⚙️ Enable AI Voice';
-      modal.remove();
-    });
-  }
 }
 
 function showToast(icon, title, text) {

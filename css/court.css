@@ -253,29 +253,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  visibility: hidden;
+  opacity: 1;
+  visibility: visible;
   transition: all var(--transition-normal);
 }
 
-.voice-modal-overlay--open {
-  opacity: 1;
-  visibility: visible;
+.voice-modal-overlay--closing {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .voice-modal {
   background: white;
   border-radius: var(--radius-lg);
-  width: 420px;
+  width: 460px;
   max-width: 92vw;
+  max-height: 85vh;
+  overflow-y: auto;
   box-shadow: var(--shadow-elevated);
-  overflow: hidden;
-  transform: translateY(12px) scale(0.97);
-  transition: transform var(--transition-normal);
-}
-
-.voice-modal-overlay--open .voice-modal {
   transform: translateY(0) scale(1);
+  transition: transform var(--transition-normal);
 }
 
 .voice-modal__header {
@@ -394,6 +391,80 @@
   color: var(--text-muted);
   line-height: 1.5;
   margin-top: var(--space-xs);
+}
+
+/* ─── Voice Mode Selector ─── */
+.voice-modal__modes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.voice-modal__mode {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 1.5px solid rgba(197, 163, 85, 0.15);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: transparent;
+}
+
+.voice-modal__mode:hover {
+  border-color: rgba(197, 163, 85, 0.35);
+  background: rgba(197, 163, 85, 0.03);
+}
+
+.voice-modal__mode--selected {
+  border-color: var(--gold);
+  background: rgba(197, 163, 85, 0.06);
+  box-shadow: 0 0 0 1px rgba(197, 163, 85, 0.15);
+}
+
+.voice-modal__mode input[type="radio"] {
+  margin-top: 3px;
+  accent-color: var(--gold);
+}
+
+.voice-modal__mode-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.voice-modal__mode-content strong {
+  font-size: var(--text-sm);
+  color: var(--charcoal);
+}
+
+.voice-modal__mode-desc {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.voice-modal__mode-badge {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  width: fit-content;
+  margin-bottom: 2px;
+}
+
+.voice-modal__mode-badge--free {
+  background: rgba(74, 123, 58, 0.12);
+  color: var(--green);
+}
+
+.voice-modal__mode-badge--premium {
+  background: rgba(197, 163, 85, 0.12);
+  color: var(--gold-dark);
 }
 
 .voice-modal__actions {
