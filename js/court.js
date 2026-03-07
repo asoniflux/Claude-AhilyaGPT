@@ -1,6 +1,7 @@
 /* ============================================
-   AhilyaGPT - Court Personas with AI-Powered TTS
-   ElevenLabs integration + Enhanced browser fallback
+   AhilyaGPT - Court Personas with AI-Powered TTS + Real-Time Conversation
+   Free AI Voice (Hugging Face) + ElevenLabs Premium + Browser Fallback
+   Real-Time Talk Mode: STT (Web Speech API) + AI (HF Inference) + TTS
    ============================================ */
 
 const courtPersonas = [
@@ -294,6 +295,328 @@ const courtPersonas = [
     ]
   }
 ];
+
+/* ============================================
+   Persona System Prompts for AI Conversation
+   ============================================ */
+
+var personaSystemPrompts = {
+  ahilya: "You are Ahilya Bai Holkar (1725-1795), the legendary Lok Mata and Queen of Indore. You speak with warmth, wisdom, and quiet authority. You rebuilt Kashi Vishwanath temple, constructed hundreds of temples, ghats, dharamshalas, and wells across India from Gangotri to Rameswaram. You governed Malwa with justice and compassion for 28 years. You are deeply spiritual, devoted to Lord Shiva, and believe true power lies in service to the people. Speak in first person as Ahilya Bai. Keep responses conversational, 2-3 sentences. Share your philosophy of governance, your devotion, and your love for your people.",
+
+  malhar: "You are Malhar Rao Holkar (1693-1766), a mighty Maratha commander and father-in-law of Ahilya Bai. You discovered young Ahilya at a temple in Chondi and chose her as bride for your son Khanderao. You are a seasoned warrior, strategic thinker, and you recognized Ahilya's exceptional leadership qualities early. You taught her warfare and governance. Speak with military authority and pride in Ahilya. Keep responses conversational, 2-3 sentences.",
+
+  khanderao: "You are Khanderao Holkar (1723-1754), husband of Ahilya Bai and son of Malhar Rao. You were married to Ahilya as children. You were a brave warrior who fell at the Battle of Kumher in 1754, struck by a cannon. You deeply respected Ahilya's intelligence and leadership. Speak with warmth about your wife and the pride you have in what she became after your death. Keep responses conversational, 2-3 sentences.",
+
+  tukoji: "You are Tukoji Rao Holkar (1723-1797), the military commander who served as the military arm of Ahilya Bai's kingdom. She directed where you fought, and together you kept Malwa safe. You witnessed skeptics silenced by Ahilya's brilliant governance. You carry her quote: 'The sword protects the body, but dharma protects the soul of a kingdom.' Speak with respect and loyalty. Keep responses conversational, 2-3 sentences.",
+
+  priest: "You are a Varanasi priest from around 1780 who witnessed the reconstruction of Kashi Vishwanath temple by Ahilya Bai. When the temple was destroyed, you thought Kashi lost its light forever. Then Ahilya sent gold, architects, and artisans from Indore. You are deeply grateful and emotional about this act. Speak with devotion and reverence. Keep responses conversational, 2-3 sentences.",
+
+  boatman: "You are a Narmada boatman from around 1790 who rows past the ghats of Maheshwar daily. You witnessed Ahilya Bai sitting at the ghat every evening, hearing grievances of common people. She built these ghats with her own treasury for all people. You speak simply, from the heart, as a common man who loved his queen. Keep responses conversational, 2-3 sentences.",
+
+  weaver: "You are a Maheshwari weaver from around 1785, a master of the loom. Ahilya Bai gave you the finest silk and cotton threads and said your art is the pride of Maheshwar. You create Maheshwari saris with patterns like Bugdi (turning of time) and Chatai (woven lives). You are proud of your craft and grateful to the queen. Speak with artistic passion. Keep responses conversational, 2-3 sentences.",
+
+  diwan: "You are Gangadhar Chandrachud, the Diwan (Chief Minister) of Ahilya Bai's court in the 1770s. You managed the treasury but Ahilya knew every figure. She could tell the cost of building a well in Gokarn as easily as the revenue from Malwa's cotton trade. You admire her precision, financial acumen, and the vast scale yet meticulous detail of her charitable works. Speak with professional respect. Keep responses conversational, 2-3 sentences."
+};
+
+/* ============================================
+   Real-Time Conversation Engine
+   Uses: Web Speech API (STT) + Hugging Face (AI) + TTS Engine
+   ============================================ */
+
+var conversationEngine = {
+  isActive: false,
+  currentPersonaId: null,
+  recognition: null,
+  conversationHistory: {},
+  hfModelId: 'mistralai/Mistral-7B-Instruct-v0.2',
+
+  // Check browser support
+  isSupported: function () {
+    return 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+  },
+
+  // Start a conversation with a persona
+  start: function (personaId) {
+    var self = this;
+
+    if (self.isActive && self.currentPersonaId === personaId) {
+      self.stop();
+      return;
+    }
+
+    if (self.isActive) {
+      self.stop();
+    }
+
+    var persona = courtPersonas.find(function (p) { return p.id === personaId; });
+    if (!persona) return;
+
+    self.currentPersonaId = personaId;
+    self.isActive = true;
+
+    // Initialize conversation history for this persona if not exists
+    if (!self.conversationHistory[personaId]) {
+      self.conversationHistory[personaId] = [];
+    }
+
+    // Show conversation UI
+    showConversationUI(personaId);
+
+    // Start listening
+    self.listen(personaId);
+  },
+
+  stop: function () {
+    this.isActive = false;
+    this.currentPersonaId = null;
+    if (this.recognition) {
+      try { this.recognition.stop(); } catch (e) {}
+      this.recognition = null;
+    }
+    ttsEngine.stop();
+    hideConversationUI();
+  },
+
+  // Listen for user speech
+  listen: function (personaId) {
+    var self = this;
+    if (!self.isActive || self.currentPersonaId !== personaId) return;
+
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      showToast('⚠️', 'Not Supported', t('court.talk.error.mic'));
+      self.stop();
+      return;
+    }
+
+    self.recognition = new SpeechRecognition();
+    var langMap = { en: 'en-IN', hi: 'hi-IN', mr: 'mr-IN' };
+    var lang = currentLang || 'en';
+    self.recognition.lang = langMap[lang] || 'en-IN';
+    self.recognition.interimResults = true;
+    self.recognition.continuous = false;
+    self.recognition.maxAlternatives = 1;
+
+    updateTalkButtonState(personaId, 'listening');
+    updateConversationStatus(personaId, 'listening');
+
+    var finalTranscript = '';
+
+    self.recognition.onresult = function (event) {
+      var interim = '';
+      finalTranscript = '';
+      for (var i = event.resultIndex; i < event.results.length; i++) {
+        var transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interim += transcript;
+        }
+      }
+      // Show interim text in the conversation UI
+      showUserMessage(personaId, interim || finalTranscript, !finalTranscript);
+    };
+
+    self.recognition.onend = function () {
+      if (finalTranscript && finalTranscript.trim().length > 1) {
+        showUserMessage(personaId, finalTranscript, false);
+        self.generateResponse(personaId, finalTranscript.trim());
+      } else if (self.isActive && self.currentPersonaId === personaId) {
+        // No speech detected, listen again
+        setTimeout(function () {
+          if (self.isActive && self.currentPersonaId === personaId) {
+            self.listen(personaId);
+          }
+        }, 300);
+      }
+    };
+
+    self.recognition.onerror = function (event) {
+      if (event.error === 'no-speech') {
+        // Silently restart
+        if (self.isActive && self.currentPersonaId === personaId) {
+          setTimeout(function () { self.listen(personaId); }, 500);
+        }
+      } else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+        showToast('⚠️', 'Microphone Blocked', t('court.talk.error.mic'));
+        self.stop();
+      }
+    };
+
+    self.recognition.start();
+  },
+
+  // Generate AI response using Hugging Face
+  generateResponse: function (personaId, userText) {
+    var self = this;
+    if (!self.isActive || self.currentPersonaId !== personaId) return;
+
+    var persona = courtPersonas.find(function (p) { return p.id === personaId; });
+    if (!persona) return;
+
+    var lang = currentLang || 'en';
+    var systemPrompt = personaSystemPrompts[personaId] || '';
+
+    // Add language instruction
+    var langInstruction = '';
+    if (lang === 'hi') {
+      langInstruction = ' Always respond in Hindi (Devanagari script).';
+    } else if (lang === 'mr') {
+      langInstruction = ' Always respond in Marathi (Devanagari script).';
+    } else {
+      langInstruction = ' Respond in English.';
+    }
+
+    updateTalkButtonState(personaId, 'thinking');
+    updateConversationStatus(personaId, 'thinking');
+
+    // Build conversation context
+    var history = self.conversationHistory[personaId] || [];
+    history.push({ role: 'user', content: userText });
+
+    // Build prompt in Mistral instruction format
+    var prompt = '<s>[INST] ' + systemPrompt + langInstruction + '\n\n';
+
+    // Include recent history (last 4 exchanges max)
+    var recentHistory = history.slice(-8);
+    for (var i = 0; i < recentHistory.length; i++) {
+      var msg = recentHistory[i];
+      if (msg.role === 'user') {
+        if (i > 0) prompt += '[INST] ';
+        prompt += msg.content + ' [/INST]';
+      } else {
+        prompt += ' ' + msg.content + '</s>';
+        if (i < recentHistory.length - 1) prompt += '<s>';
+      }
+    }
+
+    var headers = { 'Content-Type': 'application/json' };
+    if (ttsEngine.hfToken) {
+      headers['Authorization'] = 'Bearer ' + ttsEngine.hfToken;
+    }
+
+    fetch('https://api-inference.huggingface.co/models/' + self.hfModelId, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        inputs: prompt,
+        parameters: {
+          max_new_tokens: 150,
+          temperature: 0.7,
+          top_p: 0.9,
+          return_full_text: false,
+          do_sample: true
+        }
+      })
+    })
+    .then(function (response) {
+      if (response.status === 503) {
+        // Model loading — retry once
+        return response.json().then(function (data) {
+          var waitTime = Math.min((data.estimated_time || 15) * 1000, 30000);
+          showConversationNote(personaId, 'AI model warming up, please wait...');
+          return new Promise(function (resolve) {
+            setTimeout(function () {
+              fetch('https://api-inference.huggingface.co/models/' + self.hfModelId, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                  inputs: prompt,
+                  parameters: {
+                    max_new_tokens: 150,
+                    temperature: 0.7,
+                    top_p: 0.9,
+                    return_full_text: false,
+                    do_sample: true
+                  }
+                })
+              }).then(resolve);
+            }, waitTime);
+          });
+        });
+      }
+      if (!response.ok) throw new Error('AI API error: ' + response.status);
+      return response;
+    })
+    .then(function (response) {
+      if (!response.ok) throw new Error('AI API error after retry');
+      return response.json();
+    })
+    .then(function (data) {
+      var aiText = '';
+      if (Array.isArray(data) && data[0] && data[0].generated_text) {
+        aiText = data[0].generated_text.trim();
+      } else if (data.generated_text) {
+        aiText = data.generated_text.trim();
+      }
+
+      // Clean up any remaining instruction tokens
+      aiText = aiText.replace(/<\/?s>/g, '').replace(/\[INST\]/g, '').replace(/\[\/INST\]/g, '').trim();
+
+      // Take only the first meaningful response (up to 2-3 sentences)
+      var sentences = aiText.match(/[^.!?।]+[.!?।]+/g);
+      if (sentences && sentences.length > 3) {
+        aiText = sentences.slice(0, 3).join('');
+      }
+
+      if (!aiText) {
+        // Fallback to a random pre-written dialogue
+        var dialogue = persona.dialogues[Math.floor(Math.random() * persona.dialogues.length)];
+        aiText = dialogue.text[lang] || dialogue.text.en;
+      }
+
+      // Store in history
+      history.push({ role: 'assistant', content: aiText });
+      self.conversationHistory[personaId] = history;
+
+      if (!self.isActive || self.currentPersonaId !== personaId) return;
+
+      // Show AI response and speak it
+      showAIMessage(personaId, aiText, persona);
+
+      updateTalkButtonState(personaId, 'speaking');
+      updateConversationStatus(personaId, 'speaking');
+
+      ttsEngine.speak(aiText, lang, persona,
+        function () {
+          // onStart — speaking
+          startWaveformAnimation(personaId);
+        },
+        function () {
+          // onEnd — go back to listening
+          stopWaveformAnimation(personaId);
+          if (self.isActive && self.currentPersonaId === personaId) {
+            setTimeout(function () {
+              self.listen(personaId);
+            }, 600);
+          }
+        }
+      );
+    })
+    .catch(function (err) {
+      console.warn('AI generation failed:', err.message);
+      if (!self.isActive || self.currentPersonaId !== personaId) return;
+
+      // Fallback: use pre-written dialogue
+      var dialogue = persona.dialogues[Math.floor(Math.random() * persona.dialogues.length)];
+      var fallbackText = dialogue.text[lang] || dialogue.text.en;
+
+      showAIMessage(personaId, fallbackText, persona);
+      updateTalkButtonState(personaId, 'speaking');
+
+      ttsEngine.speak(fallbackText, lang, persona,
+        function () { startWaveformAnimation(personaId); },
+        function () {
+          stopWaveformAnimation(personaId);
+          if (self.isActive && self.currentPersonaId === personaId) {
+            setTimeout(function () { self.listen(personaId); }, 600);
+          }
+        }
+      );
+    });
+  }
+};
+
 
 /* ============================================
    TTS Engine — Free AI Voice (Hugging Face) + ElevenLabs Premium + Browser Fallback
@@ -705,13 +1028,18 @@ function renderCourtCards() {
       '<p class="court-card__era">' + persona.era + '</p>' +
       '<div class="court-card__buttons">' +
         '<button class="court-card__speak-btn">' + t('court.speak') + '</button>' +
-        '<button class="court-card__listen-btn">' + t('court.listen') + '</button>' +
+        '<button class="court-card__talk-btn" data-persona="' + persona.id + '">' + t('court.talk') + '</button>' +
       '</div>' +
       '<div class="court-card__speech" id="speech-' + persona.id + '">' +
         '<div class="court-card__waveform" id="waveform-' + persona.id + '"></div>' +
         '<span class="court-card__speech-text" id="speech-text-' + persona.id + '"></span>' +
         '<span class="court-card__speech-cursor"></span>' +
         '<span class="court-card__speech-source" id="speech-source-' + persona.id + '"></span>' +
+      '</div>' +
+      '<div class="court-card__conversation" id="conversation-' + persona.id + '">' +
+        '<div class="conversation__messages" id="conv-messages-' + persona.id + '"></div>' +
+        '<div class="conversation__status" id="conv-status-' + persona.id + '"></div>' +
+        '<div class="court-card__waveform" id="conv-waveform-' + persona.id + '"></div>' +
       '</div>' +
       '<div class="court-card__progress" id="progress-' + persona.id + '" style="display:none">' +
         progressDots +
@@ -734,15 +1062,19 @@ function renderCourtCards() {
   // Event delegation
   grid.addEventListener('click', function (e) {
     var speakBtn = e.target.closest('.court-card__speak-btn');
-    var listenBtn = e.target.closest('.court-card__listen-btn');
+    var talkBtn = e.target.closest('.court-card__talk-btn');
     var card = e.target.closest('.court-card');
     if (!card) return;
     var personaId = card.dataset.persona;
 
     if (speakBtn) {
+      // Stop any active conversation first
+      if (conversationEngine.isActive) conversationEngine.stop();
       handleSpeak(personaId, false);
-    } else if (listenBtn) {
-      handleSpeak(personaId, true);
+    } else if (talkBtn) {
+      // Start/stop real-time conversation
+      ttsEngine.stop();
+      conversationEngine.start(personaId);
     }
   });
 
@@ -822,20 +1154,151 @@ function handleSpeak(personaId, withTTS) {
 }
 
 function updateSpeakingUI(speaking, personaId) {
-  if (speaking && personaId) {
-    document.querySelectorAll('.court-card__listen-btn').forEach(function (btn) {
-      var card = btn.closest('.court-card');
-      if (card && card.dataset.persona === personaId) {
-        btn.classList.add('court-card__listen-btn--speaking');
-        btn.textContent = '⏹ Stop';
-      }
-    });
-  } else {
-    document.querySelectorAll('.court-card__listen-btn--speaking').forEach(function (btn) {
-      btn.classList.remove('court-card__listen-btn--speaking');
-      btn.textContent = t('court.listen');
-    });
+  // Legacy: no longer uses listen button, but keep function for speech playback state
+}
+
+/* ============================================
+   Conversation UI Helpers
+   ============================================ */
+
+function showConversationUI(personaId) {
+  // Hide any speech bubble
+  var speech = document.getElementById('speech-' + personaId);
+  if (speech) speech.classList.remove('court-card__speech--visible');
+
+  // Set active/dimmed
+  var allCards = document.querySelectorAll('.court-card');
+  allCards.forEach(function (c) {
+    if (c.dataset.persona === personaId) {
+      c.classList.add('court-card--active', 'court-card--talking');
+      c.classList.remove('court-card--dimmed');
+    } else {
+      c.classList.remove('court-card--active', 'court-card--talking');
+      c.classList.add('court-card--dimmed');
+    }
+  });
+
+  // Show conversation container
+  var conv = document.getElementById('conversation-' + personaId);
+  if (conv) conv.classList.add('court-card__conversation--active');
+
+  // Update talk button to stop state
+  updateTalkButtonState(personaId, 'active');
+}
+
+function hideConversationUI() {
+  // Reset all cards
+  document.querySelectorAll('.court-card').forEach(function (c) {
+    c.classList.remove('court-card--dimmed', 'court-card--active', 'court-card--talking');
+  });
+
+  // Hide all conversation containers
+  document.querySelectorAll('.court-card__conversation--active').forEach(function (el) {
+    el.classList.remove('court-card__conversation--active');
+  });
+
+  // Reset all talk buttons
+  document.querySelectorAll('.court-card__talk-btn').forEach(function (btn) {
+    btn.textContent = t('court.talk');
+    btn.classList.remove('court-card__talk-btn--active', 'court-card__talk-btn--listening', 'court-card__talk-btn--thinking', 'court-card__talk-btn--speaking');
+  });
+}
+
+function updateTalkButtonState(personaId, state) {
+  var btn = document.querySelector('.court-card__talk-btn[data-persona="' + personaId + '"]');
+  if (!btn) return;
+
+  btn.classList.remove('court-card__talk-btn--active', 'court-card__talk-btn--listening', 'court-card__talk-btn--thinking', 'court-card__talk-btn--speaking');
+
+  if (state === 'active' || state === 'listening') {
+    btn.classList.add('court-card__talk-btn--active', 'court-card__talk-btn--listening');
+    btn.textContent = t('court.talk.listening');
+  } else if (state === 'thinking') {
+    btn.classList.add('court-card__talk-btn--active', 'court-card__talk-btn--thinking');
+    btn.textContent = t('court.talk.thinking');
+  } else if (state === 'speaking') {
+    btn.classList.add('court-card__talk-btn--active', 'court-card__talk-btn--speaking');
+    btn.textContent = t('court.talk.speaking');
   }
+}
+
+function updateConversationStatus(personaId, state) {
+  var statusEl = document.getElementById('conv-status-' + personaId);
+  if (!statusEl) return;
+
+  if (state === 'listening') {
+    statusEl.innerHTML = '<span class="conversation__status-dot conversation__status-dot--listening"></span>' + t('court.talk.listening');
+    statusEl.className = 'conversation__status conversation__status--listening';
+  } else if (state === 'thinking') {
+    statusEl.innerHTML = '<span class="conversation__status-dot conversation__status-dot--thinking"></span>' + t('court.talk.thinking');
+    statusEl.className = 'conversation__status conversation__status--thinking';
+  } else if (state === 'speaking') {
+    statusEl.innerHTML = '<span class="conversation__status-dot conversation__status-dot--speaking"></span>' + t('court.talk.speaking');
+    statusEl.className = 'conversation__status conversation__status--speaking';
+  } else {
+    statusEl.innerHTML = '';
+    statusEl.className = 'conversation__status';
+  }
+}
+
+function showUserMessage(personaId, text, isInterim) {
+  var messagesEl = document.getElementById('conv-messages-' + personaId);
+  if (!messagesEl) return;
+
+  // Find or create the current user message bubble
+  var existing = messagesEl.querySelector('.conversation__msg--user-current');
+  if (existing) {
+    existing.querySelector('.conversation__msg-text').textContent = text;
+    if (!isInterim) {
+      existing.classList.remove('conversation__msg--user-current');
+      existing.classList.add('conversation__msg--user-final');
+    }
+  } else {
+    var msgEl = document.createElement('div');
+    msgEl.className = 'conversation__msg conversation__msg--user' + (isInterim ? ' conversation__msg--user-current' : ' conversation__msg--user-final');
+    msgEl.innerHTML = '<span class="conversation__msg-text">' + escapeHtml(text) + '</span>';
+    messagesEl.appendChild(msgEl);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+}
+
+function showAIMessage(personaId, text, persona) {
+  var messagesEl = document.getElementById('conv-messages-' + personaId);
+  if (!messagesEl) return;
+
+  var lang = currentLang || 'en';
+  var name = persona.name[lang] || persona.name.en;
+
+  var msgEl = document.createElement('div');
+  msgEl.className = 'conversation__msg conversation__msg--ai';
+  msgEl.innerHTML =
+    '<span class="conversation__msg-avatar" style="background: ' + persona.avatar.color + '">' + persona.avatar.initials + '</span>' +
+    '<div class="conversation__msg-body">' +
+      '<span class="conversation__msg-name">' + name + '</span>' +
+      '<span class="conversation__msg-text">' + escapeHtml(text) + '</span>' +
+    '</div>';
+  messagesEl.appendChild(msgEl);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function showConversationNote(personaId, text) {
+  var messagesEl = document.getElementById('conv-messages-' + personaId);
+  if (!messagesEl) return;
+
+  var noteEl = document.createElement('div');
+  noteEl.className = 'conversation__note';
+  noteEl.textContent = text;
+  messagesEl.appendChild(noteEl);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+
+  // Remove after a few seconds
+  setTimeout(function () { noteEl.remove(); }, 5000);
+}
+
+function escapeHtml(text) {
+  var div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 // ─── Waveform Visualization ───
@@ -1099,12 +1562,13 @@ function typeWriter(el, text, onComplete) {
 // Clear dimming on click outside
 document.addEventListener('click', function (e) {
   if (!e.target.closest('.court-card') && !e.target.closest('.court-card__speak-btn') &&
-      !e.target.closest('.court-card__listen-btn') && !e.target.closest('.voice-modal') &&
+      !e.target.closest('.court-card__talk-btn') && !e.target.closest('.voice-modal') &&
       !e.target.closest('#voice-settings-btn')) {
     document.querySelectorAll('.court-card').forEach(function (c) {
-      c.classList.remove('court-card--dimmed', 'court-card--active');
+      c.classList.remove('court-card--dimmed', 'court-card--active', 'court-card--talking');
     });
     ttsEngine.stop();
+    if (conversationEngine.isActive) conversationEngine.stop();
   }
 });
 

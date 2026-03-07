@@ -94,12 +94,18 @@ var translations = {
   'court.subtitle': { en: 'AhilyaGPT', hi: 'अहिल्याGPT', mr: 'अहिल्याGPT' },
   'court.title': { en: 'The Royal Court', hi: 'शाही दरबार', mr: 'शाही दरबार' },
   'court.desc': {
-    en: 'Tap to hear from historical figures of Ahilya Bai\'s era. Each persona shares their perspective on her legendary reign.',
-    hi: 'अहिल्या बाई के युग की ऐतिहासिक हस्तियों से सुनने के लिए टैप करें। प्रत्येक व्यक्तित्व उनके महान शासन पर अपना दृष्टिकोण साझा करता है।',
-    mr: 'अहिल्या बाईंच्या काळातील ऐतिहासिक व्यक्तिमत्त्वांचे बोल ऐकण्यासाठी टॅप करा. प्रत्येक व्यक्तिमत्त्व त्यांच्या महान राजवटीवर आपला दृष्टीकोन सांगतो.'
+    en: 'Talk with historical figures of Ahilya Bai\'s era. Tap "Talk" to have a real-time AI conversation — ask questions and hear them respond in their own voice.',
+    hi: 'अहिल्या बाई के युग की ऐतिहासिक हस्तियों से बात करें। "बात करें" टैप करके AI संवाद शुरू करें — सवाल पूछें और उनकी अपनी आवाज़ में जवाब सुनें।',
+    mr: 'अहिल्या बाईंच्या काळातील ऐतिहासिक व्यक्तिमत्त्वांशी बोला. "बोला" टॅप करून AI संवाद सुरू करा — प्रश्न विचारा आणि त्यांच्या स्वतःच्या आवाजात उत्तर ऐका.'
   },
   'court.speak': { en: '💬 Speak', hi: '💬 बोलें', mr: '💬 बोला' },
   'court.listen': { en: '🔊 Listen', hi: '🔊 सुनें', mr: '🔊 ऐका' },
+  'court.talk': { en: '🎙️ Talk', hi: '🎙️ बात करें', mr: '🎙️ बोला' },
+  'court.talk.listening': { en: '🎤 Listening...', hi: '🎤 सुन रहे हैं...', mr: '🎤 ऐकत आहे...' },
+  'court.talk.thinking': { en: '🤔 Thinking...', hi: '🤔 सोच रहे हैं...', mr: '🤔 विचार करत आहे...' },
+  'court.talk.speaking': { en: '🔊 Speaking...', hi: '🔊 बोल रहे हैं...', mr: '🔊 बोलत आहे...' },
+  'court.talk.stop': { en: '⏹ Stop', hi: '⏹ रुकें', mr: '⏹ थांबा' },
+  'court.talk.error.mic': { en: 'Microphone access needed for Talk mode', hi: 'बात मोड के लिए माइक्रोफ़ोन की आवश्यकता है', mr: 'बोला मोडसाठी मायक्रोफोनची आवश्यकता आहे' },
 
   // ─── MAP ───
   'map.subtitle': { en: 'The Sacred Blueprint', hi: 'पवित्र खाका', mr: 'पवित्र आराखडा' },
