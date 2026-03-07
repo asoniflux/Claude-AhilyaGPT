@@ -567,6 +567,20 @@
   margin-top: var(--space-xs);
 }
 
+/* ─── Section Titles ─── */
+.voice-modal__section-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-base);
+  color: var(--gold);
+  margin: var(--space-lg) 0 var(--space-xs) 0;
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid rgba(197, 163, 85, 0.2);
+}
+
+.voice-modal__section-title:first-of-type {
+  margin-top: var(--space-sm);
+}
+
 /* ─── Voice Mode Selector ─── */
 .voice-modal__modes {
   display: flex;
